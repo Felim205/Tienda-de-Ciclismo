@@ -6,13 +6,16 @@ package bicis.test.ui;
 
 import java.awt.Color;
 import java.awt.Image;
-import javax.swing.ImageIcon;
 import javax.swing.Icon;
+import java.awt.Toolkit;
 import javax.swing.JLabel;
 import javax.swing.JFrame;
-import java.awt.Toolkit;
+import java.time.LocalDate;
+import javax.swing.ImageIcon;
 import java.security.MessageDigest;
+import java.time.format.DateTimeFormatter;
 import java.security.NoSuchAlgorithmException;
+import java.time.format.DateTimeParseException;
 
 /**
  *
@@ -43,6 +46,24 @@ public class Utilidades {
         frame.setIconImage(
             Toolkit.getDefaultToolkit().getImage(Utilidades.class.getResource("/" + path))
         );
+    }
+    
+        public static LocalDate convertirFecha(String fecha) {
+        //Se Parsea una fecha para volverla LocalDate
+        try {
+            return LocalDate.parse(fecha.trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        } catch (DateTimeParseException e) {
+            System.err.println("Error al convertir fecha: " + e.getMessage());
+            return null;
+        }
+    }
+    
+    public static String convertirFechaAString(LocalDate fecha) {
+        //Usamos LocalDate para manejar tiempo pero se necesita en String 
+    if (fecha == null) {
+            return null;
+        }
+        return fecha.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
     
     public static String hashPassword(String password) {

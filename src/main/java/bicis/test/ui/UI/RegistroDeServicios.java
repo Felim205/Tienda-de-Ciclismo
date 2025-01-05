@@ -4,9 +4,13 @@
  */
 package bicis.test.ui.UI;
 
-import bicis.test.ui.Utilidades;
 import java.awt.Color;
 import javax.swing.JLabel;
+import java.time.LocalDate;
+import javax.swing.JOptionPane;
+import bicis.test.ui.Utilidades;
+import bicis.test.ui.Servicios.ServicioManager;
+import bicis.test.ui.Servicios.ServicioMantenimiento;
 
 /**
  *
@@ -14,9 +18,12 @@ import javax.swing.JLabel;
  */
 public class RegistroDeServicios extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MenuPrincipal
-     */
+    private void cargarEstadosEnComboBox() {
+    ComboBoxEstado.removeAllItems();//Se limpia
+    for (ServicioMantenimiento.EstadoServicio estado : ServicioMantenimiento.EstadoServicio.values()) {
+        ComboBoxEstado.addItem(estado.name()); //Se agregan los valores
+        }
+    }
 
     public RegistroDeServicios() {
         initComponents();
@@ -37,6 +44,10 @@ public class RegistroDeServicios extends javax.swing.JFrame {
         
         //Activar esta línea hasta el final
         Utilidades.setCustomIcon(this, "images/CicloTEC Logo.png");
+    
+        //Actualizar el JLabel del código de servicio
+        TextoCodigoServicio.setText(String.valueOf(ServicioManager.getCodigoServicioActual()));
+        cargarEstadosEnComboBox();
     }
     
         
@@ -134,12 +145,22 @@ public class RegistroDeServicios extends javax.swing.JFrame {
         Agregar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         Agregar.setForeground(new java.awt.Color(51, 51, 51));
         Agregar.setText("Agregar");
+        Agregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AgregarActionPerformed(evt);
+            }
+        });
         getContentPane().add(Agregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 380, 120, 30));
 
         Buscar.setBackground(new java.awt.Color(217, 217, 217));
         Buscar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         Buscar.setForeground(new java.awt.Color(51, 51, 51));
         Buscar.setText("Buscar");
+        Buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BuscarActionPerformed(evt);
+            }
+        });
         getContentPane().add(Buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 410, 120, 30));
 
         Modificar.setBackground(new java.awt.Color(217, 217, 217));
@@ -258,6 +279,11 @@ public class RegistroDeServicios extends javax.swing.JFrame {
         ComboBoxEstado.setBackground(new java.awt.Color(217, 217, 217));
         ComboBoxEstado.setForeground(new java.awt.Color(51, 51, 51));
         ComboBoxEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Abierto", "Cerrado" }));
+        ComboBoxEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboBoxEstadoActionPerformed(evt);
+            }
+        });
         getContentPane().add(ComboBoxEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 340, 360, -1));
 
         FondoCodigoServicio.setForeground(new java.awt.Color(51, 51, 51));
@@ -289,12 +315,180 @@ public class RegistroDeServicios extends javax.swing.JFrame {
     }//GEN-LAST:event_BackActionPerformed
 
     private void EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarActionPerformed
-        // TODO add your handling code here:
+        try {
+        int codigo = Integer.parseInt(TextoCodigoServicio.getText().trim());
+        ServicioMantenimiento servicio = ServicioManager.buscarPorCodigo(codigo);
+
+        if (servicio != null) {
+            // Validar que el servicio no esté facturado
+            if (servicio.getEstado() == ServicioMantenimiento.EstadoServicio.CERRADO) {
+                JOptionPane.showMessageDialog(this, "No se puede eliminar un servicio ya facturado.");
+                return;
+            }
+            
+            //Agregué una confirmación por si acaso por ser eliminar
+            int confirmacion = JOptionPane.showConfirmDialog(this, 
+                "¿Está seguro de que desea eliminar este servicio?", 
+                "Confirmar eliminación", 
+                JOptionPane.YES_NO_OPTION);
+
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                ServicioManager.eliminarServicio(codigo);
+                JOptionPane.showMessageDialog(this, "Servicio eliminado correctamente.");
+            }
+            
+            //Popups
+        } else {
+            JOptionPane.showMessageDialog(this, "Servicio no encontrado.");
+        }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Por favor, ingrese un código válido.");
+    }
     }//GEN-LAST:event_EliminarActionPerformed
 
     private void ModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModificarActionPerformed
-        // TODO add your handling code here:
+    try {
+        // Obtener el código del servicio
+        int codigo = Integer.parseInt(TextoCodigoServicio.getText().trim());
+        ServicioMantenimiento servicio = ServicioManager.buscarPorCodigo(codigo);
+
+        if (servicio != null) {
+            // Validar que los campos no estén vacíos
+            if (TextFieldMarcaBici.getText().trim().isEmpty() || 
+                TextFieldPrecio.getText().trim().isEmpty() || 
+                TextFieldFechaRecibido.getText().trim().isEmpty() || 
+                TextFieldFechaEntrega.getText().trim().isEmpty() || 
+                TextFieldObservacion.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.");
+                return;
+            }
+
+            // Convertir las fechas
+            LocalDate fechaRecibido = Utilidades.convertirFecha(TextFieldFechaRecibido.getText().trim());
+            LocalDate fechaEntrega = Utilidades.convertirFecha(TextFieldFechaEntrega.getText().trim());
+
+
+            if (fechaRecibido == null || fechaEntrega == null) {
+                JOptionPane.showMessageDialog(this, "Las fechas deben estar en formato 'yyyy-MM-dd'.", "Error de Fecha", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Validar el estado 
+            String seleccionEstado = (String) ComboBoxEstado.getSelectedItem();
+            if (seleccionEstado == null || seleccionEstado.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Seleccione un estado válido.");
+                return;
+            }
+            ServicioMantenimiento.EstadoServicio estadoSeleccionado = ServicioMantenimiento.EstadoServicio.valueOf(seleccionEstado.toUpperCase());
+
+            // Actualizar los atributos del servicio
+            servicio.setMarcaBicicleta(TextFieldMarcaBici.getText().trim());
+            servicio.setPrecio(Integer.parseInt(TextFieldPrecio.getText().trim()));
+            servicio.setFechaRecibido(fechaRecibido);
+            servicio.setFechaEntrega(fechaEntrega);
+            servicio.setObservaciones(TextFieldObservacion.getText().trim());
+            servicio.setEstado(estadoSeleccionado);
+
+            //Popups
+            JOptionPane.showMessageDialog(this, "Servicio modificado correctamente.");
+        } else {
+            JOptionPane.showMessageDialog(this, "Servicio no encontrado.");
+        }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Por favor, ingrese valores válidos para el precio o el código del servicio.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione un estado válido.", "Error de Estado", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_ModificarActionPerformed
+
+    private void AgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarActionPerformed
+    try {
+        // Validar que los campos no estén vacíos
+        if (TextFieldMarcaBici.getText().trim().isEmpty() || 
+            jTextArea1.getText().trim().isEmpty() || 
+            TextFieldPrecio.getText().trim().isEmpty() || 
+            TextFieldFechaRecibido.getText().trim().isEmpty() || 
+            TextFieldFechaEntrega.getText().trim().isEmpty() || 
+            TextFieldObservacion.getText().trim().isEmpty()) {
+            // Popup de los campos vacíos
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.");
+            return;
+        }
+        
+        // Validar el Combobox de estado
+        String seleccionEstado = (String) ComboBoxEstado.getSelectedItem();
+        if (seleccionEstado == null || seleccionEstado.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Seleccione un estado válido.");
+            return;
+        }
+        ServicioMantenimiento.EstadoServicio estadoSeleccionado = ServicioMantenimiento.EstadoServicio.valueOf(seleccionEstado.toUpperCase());
+        
+        LocalDate fechaRecibido = Utilidades.convertirFecha(TextFieldFechaRecibido.getText().trim());
+        LocalDate fechaEntrega = Utilidades.convertirFecha(TextFieldFechaEntrega.getText().trim());
+        
+        // Validar las Fechas
+        if (fechaRecibido == null || fechaEntrega == null) {
+            JOptionPane.showMessageDialog(this, "Las fechas deben estar en formato 'dd-MM-yyyy'.", "Error de Fecha", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Nuevo Serviucio Mantenimiento()
+        ServicioMantenimiento nuevoServicio = new ServicioMantenimiento(
+            ServicioManager.getCodigoServicioActual(),
+            Integer.parseInt(ComboBoxCliente.getSelectedItem().toString()), // Supone que contiene códigos de cliente
+            TextFieldMarcaBici.getText().trim(),
+            jTextArea1.getText().trim(),
+            Integer.parseInt(TextFieldPrecio.getText().trim()),
+            fechaRecibido,
+            fechaEntrega,
+            TextFieldObservacion.getText().trim(),
+            estadoSeleccionado
+        );
+
+        ServicioManager.agregarServicio(nuevoServicio);
+
+        // Actualizar el código de servicio
+        TextoCodigoServicio.setText(String.valueOf(ServicioManager.getCodigoServicioActual()));
+
+        // Popups
+        JOptionPane.showMessageDialog(this, "Servicio agregado correctamente.");
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Por favor, ingrese valores válidos para el precio o el código del cliente.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione un estado válido.", "Error de Estado", JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_AgregarActionPerformed
+
+    private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
+        try {
+            int codigo = Integer.parseInt(TextoCodigoServicio.getText().trim());
+            ServicioMantenimiento servicio = ServicioManager.buscarPorCodigo(codigo);
+
+            if (servicio != null) {
+                // Actualizar la información
+                TextFieldMarcaBici.setText(servicio.getMarcaBicicleta());
+                jTextArea1.setText(servicio.getDescripcionBicicleta());
+                TextFieldPrecio.setText(String.valueOf(servicio.getPrecio()));
+                TextFieldFechaRecibido.setText(servicio.getFechaRecibido().toString());
+                TextFieldFechaEntrega.setText(servicio.getFechaEntrega().toString());
+                TextFieldObservacion.setText(servicio.getObservaciones());
+                ComboBoxEstado.setSelectedItem(servicio.getEstado().name());
+                JOptionPane.showMessageDialog(this, "Servicio encontrado.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Servicio no encontrado.");
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese un código válido.");
+        }
+    }//GEN-LAST:event_BuscarActionPerformed
+
+    private void ComboBoxEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxEstadoActionPerformed
+        String seleccion = (String) ComboBoxEstado.getSelectedItem(); //Se consigue la info en el comboBox
+    if (seleccion != null && !seleccion.isEmpty()) {
+        ServicioMantenimiento.EstadoServicio estadoSeleccionado = ServicioMantenimiento.EstadoServicio.valueOf(seleccion.toUpperCase()); //Se vuelve enum
+        System.out.println("Estado seleccionado: " + estadoSeleccionado);
+        }
+    }//GEN-LAST:event_ComboBoxEstadoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -331,10 +525,8 @@ public class RegistroDeServicios extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RegistroDeServicios().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new RegistroDeServicios().setVisible(true);
         });
     }
 
