@@ -41,7 +41,7 @@ public class LoginLocal {
     public boolean autenticar(String username, String password) {
         if (usuarios.containsKey(username)) {
             String hashAlmacenado = usuarios.get(username);
-            return HashUtils.verifyPassword(password, hashAlmacenado);
+            return Utilidades.verifyPassword(password, hashAlmacenado);
         }
         return false;
     }
@@ -49,10 +49,10 @@ public class LoginLocal {
     // Creador del txt (Mejor dejarlo por si se elimina en algún momento)
     public static void inicializarArchivoUsuarios() {
         String[] usuariosIniciales = {
-            "admin|" + HashUtils.hashPassword("1234"),
-            "Gabriel|" + HashUtils.hashPassword("1205"),
-            "Felipe|" + HashUtils.hashPassword("0202"),
-            "Daniela|" + HashUtils.hashPassword("9898")
+            "admin|" + Utilidades.hashPassword("1234"),
+            "Gabriel|" + Utilidades.hashPassword("1205"),
+            "Felipe|" + Utilidades.hashPassword("0202"),
+            "Daniela|" + Utilidades.hashPassword("9898")
         };
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
