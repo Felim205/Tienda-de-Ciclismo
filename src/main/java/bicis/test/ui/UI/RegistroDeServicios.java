@@ -11,6 +11,9 @@ import javax.swing.JOptionPane;
 import bicis.test.ui.Utilidades;
 import bicis.test.ui.Servicios.ServicioManager;
 import bicis.test.ui.Servicios.ServicioMantenimiento;
+import bicis.test.ui.ClienteManager;
+import bicis.test.ui.Cliente;
+import bicis.test.ui.Bicicleta;
 
 /**
  *
@@ -48,6 +51,11 @@ public class RegistroDeServicios extends javax.swing.JFrame {
         //Actualizar el JLabel del código de servicio
         TextoCodigoServicio.setText(String.valueOf(ServicioManager.getCodigoServicioActual()));
         cargarEstadosEnComboBox();
+        
+        // Llenar el ComboBoxCliente con los clientes
+        for (Cliente cliente : ClienteManager.getClientes()) {
+            ComboBoxCliente.addItem(cliente.getFullNombre());
+        }
     }
     
         
@@ -243,6 +251,11 @@ public class RegistroDeServicios extends javax.swing.JFrame {
         TextFieldMarcaBici.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
         TextFieldMarcaBici.setForeground(new java.awt.Color(51, 51, 51));
         TextFieldMarcaBici.setBorder(null);
+        TextFieldMarcaBici.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TextFieldMarcaBiciActionPerformed(evt);
+            }
+        });
         getContentPane().add(TextFieldMarcaBici, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 80, 250, 20));
 
         jTextArea1.setBackground(new java.awt.Color(217, 217, 217));
@@ -381,6 +394,20 @@ public class RegistroDeServicios extends javax.swing.JFrame {
             }
             ServicioMantenimiento.EstadoServicio estadoSeleccionado = ServicioMantenimiento.EstadoServicio.valueOf(seleccionEstado.toUpperCase());
 
+            // Valida el tamaño de la bicicleta 
+            String textoTamaño = TextFieldMarcaBici.getText().trim();
+            try {
+                Bicicleta.TamañoBicicleta.valueOf(textoTamaño.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                
+                // Muestra popup con los tamaños válidos
+                JOptionPane.showMessageDialog(this, 
+                    "El tamaño ingresado no es válido. Los tamaños permitidos son: T12, T16, T22, T26, T27, T27_5, T29.", 
+                    "Error de Tamaño", 
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             // Actualizar los atributos del servicio
             servicio.setMarcaBicicleta(TextFieldMarcaBici.getText().trim());
             servicio.setPrecio(Integer.parseInt(TextFieldPrecio.getText().trim()));
@@ -432,10 +459,31 @@ public class RegistroDeServicios extends javax.swing.JFrame {
             return;
         }
         
-        // Nuevo Serviucio Mantenimiento()
+        // Obtener el cliente seleccionado
+        Cliente clienteSeleccionado = ClienteManager.getClientePorNombre((String) ComboBoxCliente.getSelectedItem());
+        if (clienteSeleccionado == null) {
+            JOptionPane.showMessageDialog(this, "El cliente seleccionado no es válido.", "Error de Cliente", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Valida el tamaño de la bicicleta
+        String textoTamaño = TextFieldMarcaBici.getText().trim();
+        try {
+            Bicicleta.TamañoBicicleta.valueOf(textoTamaño.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            
+            // Muestra popup con los tamaños válidos
+            JOptionPane.showMessageDialog(this, 
+                "El tamaño ingresado no es válido. Los tamaños permitidos son: T12, T16, T22, T26, T27, T27_5, T29.", 
+                "Error de Tamaño", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Nuevo Servicio Mantenimiento()
         ServicioMantenimiento nuevoServicio = new ServicioMantenimiento(
             ServicioManager.getCodigoServicioActual(),
-            Integer.parseInt(ComboBoxCliente.getSelectedItem().toString()), // Supone que contiene códigos de cliente
+            clienteSeleccionado.getCodigo(), // Usar el código del cliente
             TextFieldMarcaBici.getText().trim(),
             jTextArea1.getText().trim(),
             Integer.parseInt(TextFieldPrecio.getText().trim()),
@@ -489,6 +537,10 @@ public class RegistroDeServicios extends javax.swing.JFrame {
         System.out.println("Estado seleccionado: " + estadoSeleccionado);
         }
     }//GEN-LAST:event_ComboBoxEstadoActionPerformed
+
+    private void TextFieldMarcaBiciActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextFieldMarcaBiciActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TextFieldMarcaBiciActionPerformed
 
     /**
      * @param args the command line arguments

@@ -127,7 +127,11 @@ public class Cliente {
     public void validarTelefono(int telefono) {
         this.telefono = telefono;
     }
-
+    
+    public String getFullNombre(){
+    return nombre + " " + apellido;
+    }
+    
     // Método toString
     @Override
     public String toString() {

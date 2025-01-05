@@ -12,24 +12,22 @@ import java.util.Map;
  *
  * @author gabob
  */
-
 public class LoginLocal {
-    // Ruta al txt
     private static final String FILE_PATH = "usuarios.txt";
-    private Map<String, String> usuarios = new HashMap<>();
+    private final Map<String, Usuario> usuarios = new HashMap<>();
 
     public LoginLocal() {
         cargarUsuarios();
     }
 
-    // Método que carga los usuarios
+    // Se cargan los usuarios desde el archivo txt
     private void cargarUsuarios() {
         try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split("\\|");
                 if (partes.length == 2) {
-                    usuarios.put(partes[0], partes[1]); // username|password_hash
+                    usuarios.put(partes[0], new Usuario(partes[0], partes[1])); // Crear Usuario
                 }
             }
         } catch (IOException e) {
@@ -37,16 +35,16 @@ public class LoginLocal {
         }
     }
 
-    // Verificador del usuario
+    // Autentifica las credenciales
     public boolean autenticar(String username, String password) {
-        if (usuarios.containsKey(username)) {
-            String hashAlmacenado = usuarios.get(username);
-            return Utilidades.verifyPassword(password, hashAlmacenado);
+        Usuario usuario = usuarios.get(username);
+        if (usuario != null) {
+            return Utilidades.verifyPassword(password, usuario.getContraseña());
         }
         return false;
     }
 
-    // Creador del txt (Mejor dejarlo por si se elimina en algún momento)
+    // Inicializa con estos usuarios de prueba
     public static void inicializarArchivoUsuarios() {
         String[] usuariosIniciales = {
             "admin|" + Utilidades.hashPassword("1234"),
@@ -66,32 +64,25 @@ public class LoginLocal {
         }
     }
 
-    
-    
-    
-    // Los métodos para la gui
+    // Vlida credenciales
     public boolean validarCredenciales(String username, String password) {
         return autenticar(username, password);
     }
 
-    public Map<String, String> obtenerUsuarios() {
+    // Obteniene los usuarios como objetos
+    public Map<String, Usuario> obtenerUsuarios() {
         return usuarios;
     }
 
-    // El main vuelve a crear el txt de ser necesario y nos recuerda las 
-    //contraseñas
     public static void main(String[] args) {
-        // Inicializar archivo de usuarios
         inicializarArchivoUsuarios();
 
-        // Crear instancia de LoginLocal
         LoginLocal login = new LoginLocal();
 
-        // Prueba de autenticación
-        System.out.println("Recordar usuarios y contraseñas:");
-        System.out.println("admin -> 1234: " + login.validarCredenciales("admin", "1234")); // true
-        System.out.println("Gabriel -> 1205: " + login.validarCredenciales("Gabriel", "1205")); // true
-        System.out.println("Felipe -> 0202: " + login.validarCredenciales("Felipe", "0202")); // true
-        System.out.println("Daniela -> 9999: " + login.validarCredenciales("Daniela", "9898")); // true
+        // Prueba
+        System.out.println("admin -> 1234: " + login.validarCredenciales("admin", "1234"));
+        System.out.println("Gabriel -> 1205: " + login.validarCredenciales("Gabriel", "1205"));
+        System.out.println("Felipe -> 0202: " + login.validarCredenciales("Felipe", "0202"));
+        System.out.println("Daniela -> 9898: " + login.validarCredenciales("Daniela", "9898"));
     }
 }
