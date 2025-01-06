@@ -5,15 +5,18 @@
 package bicis.test.ui;
 
 import bicis.test.ui.UI.MenuPrincipal;
+import javax.swing.JOptionPane;
 import java.awt.Color;
 
 /**
  * Clase que implementa la interfaz gráfica de inicio de sesión para la aplicación CicloTEC.
- * Permite a los usuarios autenticarse con un ID y una contraseña para acceder al menú principal.
+ * Permite a los usuarios autenticarse con un ID y una contraseña para acceder al menú principal
+ * o agregar nuevos usuarios mediante el botón "Nuevo".
  * 
  * @author gabob
  */
 public class Login extends javax.swing.JFrame {
+    private final LoginLocal loginLocal;
 
     /**
      * Crea una nueva instancia de la ventana de inicio de sesión.
@@ -21,6 +24,8 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        loginLocal = new LoginLocal();
+        LoginLocal.inicializarArchivoUsuarios();
         
         //Ponerle color al JLabel del fondo (Gris oscuro)
         Color col = new Color(152, 151, 153);
@@ -33,8 +38,6 @@ public class Login extends javax.swing.JFrame {
         //Activar esta línea hasta el final
         Utilidades.setCustomIcon(this, "images/CicloTEC Logo.png");
     }
-    
-        
 
     /**
      * Método generado automáticamente para inicializar los componentes gráficos.
@@ -106,19 +109,20 @@ public class Login extends javax.swing.JFrame {
 
         TextoDummy.setFont(new java.awt.Font("Segoe UI Semibold", 2, 10)); // NOI18N
         TextoDummy.setForeground(new java.awt.Color(51, 51, 51));
-        TextoDummy.setText("De momento, vamos al menú así:");
-        getContentPane().add(TextoDummy, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 360, -1, -1));
+        TextoDummy.setText("O, alternaticamente podemos:");
+        getContentPane().add(TextoDummy, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 350, -1, -1));
 
         DummyBtn.setBackground(new java.awt.Color(217, 217, 217));
+        DummyBtn.setFont(new java.awt.Font("Segoe UI Semibold", 1, 10)); // NOI18N
         DummyBtn.setForeground(new java.awt.Color(51, 51, 51));
-        DummyBtn.setText("dummy");
+        DummyBtn.setText("Agregar Usuario");
         DummyBtn.setBorderPainted(false);
         DummyBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 DummyBtnActionPerformed(evt);
             }
         });
-        getContentPane().add(DummyBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 360, -1, 20));
+        getContentPane().add(DummyBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 350, 110, 20));
 
         LogoCicloTEC.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/CicloTEC (Tienda).png"))); // NOI18N
         LogoCicloTEC.setText("jLabel4");
@@ -127,15 +131,34 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     /**
-     * Acción ejecutada al presionar el botón "Dummy".
-     * Permite acceder al menú principal sin validar credenciales.
+     * Acción ejecutada al presionar el botón "Agregar".
+     * Pregunta si se desea agregar un nuevo usuario, valida los datos y lo registra.
      * 
      * @param evt Evento de acción generado por el botón.
      */
     private void DummyBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DummyBtnActionPerformed
-        MenuPrincipal jfmain = new MenuPrincipal();
-        jfmain.show(); //Mostrar MenuPrincipal
-        dispose(); //Cerrar Login
+    String username = TextFieldID.getText().trim();
+    String password = new String(PasswordFieldContraseña.getPassword()).trim();
+
+    if (username.isEmpty() || password.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor, complete ambos campos.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    if (password.length() < 3 || username.contains(",") || password.contains(",") || password.matches(".*[:;\"&%].*")) {
+        JOptionPane.showMessageDialog(this, "La contraseña debe tener al menos 3 caracteres y no incluir caracteres especiales como , : ; \" & %.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    int confirm = JOptionPane.showConfirmDialog(this, "¿Desea agregar este usuario?", "Confirmar", JOptionPane.YES_NO_OPTION);
+    if (confirm == JOptionPane.YES_OPTION) {
+        try {
+            loginLocal.agregarUsuario(username, password); // Usamos la instancia existente
+            JOptionPane.showMessageDialog(this, "Usuario agregado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     }//GEN-LAST:event_DummyBtnActionPerformed
     /**
      * Acción ejecutada al presionar el botón "Login".
@@ -149,7 +172,7 @@ public class Login extends javax.swing.JFrame {
     String username = TextFieldID.getText().trim();
     String password = new String(PasswordFieldContraseña.getPassword()).trim();
 
-    // Se inicializa LoginLocal
+    // Se inicializa LoginLocalGa
     LoginLocal loginLocal = new LoginLocal();
 
     // Se revisa la información extraida de ID y de Contraseña

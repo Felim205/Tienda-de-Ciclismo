@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package bicis.test.ui;
 
 import java.io.*;
@@ -10,36 +6,39 @@ import java.util.Map;
 
 /**
  * Clase que implementa la gestión de usuarios y el proceso de autenticación local
- * basado en un archivo de texto. Los usuarios se cargan desde un archivo y se
+ * basado en un archivo binario (.acc). Los usuarios se cargan desde el archivo y se
  * validan sus credenciales en el sistema.
+ * También permite agregar nuevos usuarios dinámicamente.
  * 
  * @author gabob
  */
 public class LoginLocal {
-    private static final String FILE_PATH = "usuarios.txt";
+    private static final String FILE_PATH = "usuarios.acc";
     private final Map<String, Usuario> usuarios = new HashMap<>();
 
     /**
      * Constructor que inicializa la instancia de LoginLocal cargando los usuarios
-     * desde el archivo de texto.
+     * desde el archivo binario.
      */
     public LoginLocal() {
         cargarUsuarios();
     }
 
     /**
-     * Carga los usuarios desde un archivo de texto y los almacena en un mapa.
-     * Cada línea del archivo debe tener el formato "username|hashed_password".
+     * Carga los usuarios desde un archivo binario y los almacena en un mapa.
+     * Cada línea del archivo debe tener el formato "username, contraseña".
      */
     private void cargarUsuarios() {
         try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
             String linea;
             while ((linea = br.readLine()) != null) {
-                String[] partes = linea.split("\\|");
+                String[] partes = linea.split(",");
                 if (partes.length == 2) {
-                    usuarios.put(partes[0], new Usuario(partes[0], partes[1])); // Crear Usuario
+                    usuarios.put(partes[0].trim(), new Usuario(partes[0].trim(), partes[1].trim())); // Crear Usuario
                 }
             }
+        } catch (FileNotFoundException e) {
+            System.out.println("Archivo de usuarios no encontrado. Se creará uno nuevo.");
         } catch (IOException e) {
             System.out.println("Error al cargar usuarios: " + e.getMessage());
         }
@@ -66,21 +65,60 @@ public class LoginLocal {
      * Cada usuario tendrá un nombre y una contraseña predefinida.
      */
     public static void inicializarArchivoUsuarios() {
-        String[] usuariosIniciales = {
-            "admin|" + Utilidades.hashPassword("1234"),
-            "Gabriel|" + Utilidades.hashPassword("1205"),
-            "Felipe|" + Utilidades.hashPassword("0202"),
-            "Daniela|" + Utilidades.hashPassword("9898")
-        };
+        File archivoUsuarios = new File("usuarios.acc");
+        if (!archivoUsuarios.exists()) {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoUsuarios))) {
+                String[] usuariosIniciales = {
+                    "admin, " + Utilidades.hashPassword("1234"),
+                    "Gabriel, " + Utilidades.hashPassword("1205"),
+                    "Felipe, " + Utilidades.hashPassword("0202"),
+                    "Daniela, " + Utilidades.hashPassword("9898"), 
+                    "pperez, " + Utilidades.hashPassword("12345"),
+                    "ccastro, " + Utilidades.hashPassword("castro123")
+                };
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            for (String usuario : usuariosIniciales) {
-                bw.write(usuario);
-                bw.newLine();
+                for (String usuario : usuariosIniciales) {
+                    bw.write(usuario);
+                    bw.newLine();
+                }
+                System.out.println("Archivo de usuarios creado correctamente.");
+            } catch (IOException e) {
+                System.err.println("Error al crear el archivo de usuarios: " + e.getMessage());
             }
-            System.out.println("Archivo de usuarios inicializado correctamente.");
+        } else {
+            System.out.println("El archivo de usuarios ya existe.");
+        }
+    }
+
+    /**
+     * Agrega un nuevo usuario al archivo de usuarios y lo registra en el mapa.
+     * 
+     * @param username Nombre de usuario a agregar.
+     * @param password Contraseña del usuario en texto plano.
+     * @throws IllegalArgumentException Si el usuario ya existe o los datos son inválidos.
+     */
+    public void agregarUsuario(String username, String password) {
+        if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre de usuario y la contraseña no pueden estar vacíos.");
+        }
+
+        if (usuarios.containsKey(username)) {
+            throw new IllegalArgumentException("El usuario ya existe.");
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH, true))) {
+            // Encriptar la contraseña antes de escribirla
+            String hashedPassword = Utilidades.hashPassword(password);
+
+            // Escribir en el archivo
+            bw.write(username + ", " + hashedPassword);
+            bw.newLine();
+
+            // Actualizar el mapa en memoria
+            usuarios.put(username, new Usuario(username, hashedPassword));
+            System.out.println("Usuario agregado correctamente.");
         } catch (IOException e) {
-            System.out.println("Error al inicializar el archivo de usuarios: " + e.getMessage());
+            System.out.println("Error al agregar el usuario: " + e.getMessage());
         }
     }
 
@@ -120,5 +158,9 @@ public class LoginLocal {
         System.out.println("Gabriel -> 1205: " + login.validarCredenciales("Gabriel", "1205"));
         System.out.println("Felipe -> 0202: " + login.validarCredenciales("Felipe", "0202"));
         System.out.println("Daniela -> 9898: " + login.validarCredenciales("Daniela", "9898"));
+
+        // Agregar nuevo usuario
+        login.agregarUsuario("nuevoUsuario", "nuevaContraseña");
+        System.out.println("nuevoUsuario -> nuevaContraseña: " + login.validarCredenciales("nuevoUsuario", "nuevaContraseña"));
     }
 }
