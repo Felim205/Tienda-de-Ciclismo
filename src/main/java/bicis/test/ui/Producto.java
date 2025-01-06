@@ -140,6 +140,15 @@ public class Producto {
         listaProductos.removeIf(producto -> producto.codigoProducto == codigo);
     }
     
+    public static int generarCodigoProducto() {
+        if (listaProductos.isEmpty()) {
+            return 1; // Si la lista esta vacia el primer codigo es 1
+        } else {
+            // Devuelve el codigo mas 1
+            return listaProductos.get(listaProductos.size() - 1).getCodigoProducto() + 1;
+        }
+    }
+
     @Override
     public String toString() {
         return "Producto{" +
