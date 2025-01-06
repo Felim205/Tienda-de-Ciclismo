@@ -52,7 +52,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         Principal = new javax.swing.JLabel();
         menuLogo = new javax.swing.JLabel();
         Linea = new javax.swing.JLabel();
-        Settings = new javax.swing.JButton();
         Login = new javax.swing.JButton();
         RegistroProductos = new javax.swing.JButton();
         RegistroClientes = new javax.swing.JButton();
@@ -86,17 +85,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         Linea.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Línea Vertical.png"))); // NOI18N
         getContentPane().add(Linea, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, 10, 390));
-
-        Settings.setBackground(new java.awt.Color(217, 217, 217));
-        Settings.setForeground(new java.awt.Color(51, 51, 51));
-        Settings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Icon-Settings.png"))); // NOI18N
-        Settings.setBorderPainted(false);
-        Settings.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SettingsActionPerformed(evt);
-            }
-        });
-        getContentPane().add(Settings, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 390, 50, 50));
 
         Login.setBackground(new java.awt.Color(217, 217, 217));
         Login.setForeground(new java.awt.Color(51, 51, 51));
@@ -153,16 +141,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    /**
-     * Acción ejecutada al presionar el botón de configuración (Settings).
-     * Actualmente este método no tiene implementación.
-     * 
-     * @param evt Evento de acción generado por el botón.
-     */
-    private void SettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SettingsActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_SettingsActionPerformed
-    /**
+
+   /**
      * Acción ejecutada al presionar el botón "Login".
      * Redirige al formulario de inicio de sesión.
      * 
@@ -272,7 +252,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton RegistroClientes;
     private javax.swing.JButton RegistroProductos;
     private javax.swing.JButton RegistroServicios;
-    private javax.swing.JButton Settings;
     private javax.swing.JLabel menuLogo;
     // End of variables declaration//GEN-END:variables
 }
