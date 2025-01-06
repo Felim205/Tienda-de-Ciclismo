@@ -23,7 +23,8 @@ public class RegistroDeProductos extends javax.swing.JFrame {
         
         //El array de los JLabels
         JLabel[] labels = {LogoCicloTEC, ProductosLogo,FondoCodigo,
-        FondoNombre,FondoTamaño,FondoMarca,FondoPrecio,FondoCantidad};
+        FondoNombre,FondoTamaño,FondoMarca,FondoPrecio,FondoCantidad, 
+        FondoCodigoArticulo, FondoNombreArticulo};
         
         //Ponerle color JLabel del fondo (Gris Oscuro)
         Color col = new Color(152, 151, 153);
@@ -62,6 +63,8 @@ public class RegistroDeProductos extends javax.swing.JFrame {
         Modificar = new javax.swing.JButton();
         Codigo = new javax.swing.JLabel();
         Nombre = new javax.swing.JLabel();
+        CodigoArticulo = new javax.swing.JLabel();
+        NombreArticulo = new javax.swing.JLabel();
         Tipo = new javax.swing.JLabel();
         Tamaño = new javax.swing.JLabel();
         Marca = new javax.swing.JLabel();
@@ -69,6 +72,8 @@ public class RegistroDeProductos extends javax.swing.JFrame {
         Cantidad = new javax.swing.JLabel();
         TextoCodigo = new javax.swing.JLabel();
         TextFieldNombre = new javax.swing.JTextField();
+        TextFieldCodigoArticulo = new javax.swing.JTextField();
+        TextFieldNombreArticulo = new javax.swing.JTextField();
         ComboBoxTipo = new javax.swing.JComboBox<>();
         TextFieldTamaño = new javax.swing.JTextField();
         TextFieldMarca = new javax.swing.JTextField();
@@ -76,6 +81,8 @@ public class RegistroDeProductos extends javax.swing.JFrame {
         TextFieldCantidad = new javax.swing.JTextField();
         FondoCodigo = new javax.swing.JLabel();
         FondoNombre = new javax.swing.JLabel();
+        FondoCodigoArticulo = new javax.swing.JLabel();
+        FondoNombreArticulo = new javax.swing.JLabel();
         FondoTamaño = new javax.swing.JLabel();
         FondoMarca = new javax.swing.JLabel();
         FondoPrecio = new javax.swing.JLabel();
@@ -158,44 +165,54 @@ public class RegistroDeProductos extends javax.swing.JFrame {
         });
         getContentPane().add(Modificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 380, 120, 30));
 
-        Codigo.setFont(new java.awt.Font("Segoe UI Semibold", 1, 26)); // NOI18N
+        Codigo.setFont(new java.awt.Font("Segoe UI Semibold", 1, 20)); // NOI18N
         Codigo.setForeground(new java.awt.Color(51, 51, 51));
         Codigo.setText("Código:");
         getContentPane().add(Codigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 20, -1, -1));
 
-        Nombre.setFont(new java.awt.Font("Segoe UI Semibold", 1, 26)); // NOI18N
+        Nombre.setFont(new java.awt.Font("Segoe UI Semibold", 1, 20)); // NOI18N
         Nombre.setForeground(new java.awt.Color(51, 51, 51));
         Nombre.setText("Nombre:");
-        getContentPane().add(Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 70, -1, -1));
+        getContentPane().add(Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 60, -1, -1));
 
-        Tipo.setFont(new java.awt.Font("Segoe UI Semibold", 1, 26)); // NOI18N
+        CodigoArticulo.setFont(new java.awt.Font("Segoe UI Semibold", 1, 20)); // NOI18N
+        CodigoArticulo.setForeground(new java.awt.Color(51, 51, 51));
+        CodigoArticulo.setText("Código Artículo:");
+        getContentPane().add(CodigoArticulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 100, -1, -1));
+
+        NombreArticulo.setFont(new java.awt.Font("Segoe UI Semibold", 1, 20)); // NOI18N
+        NombreArticulo.setForeground(new java.awt.Color(51, 51, 51));
+        NombreArticulo.setText("Nombre Artículo:");
+        getContentPane().add(NombreArticulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 140, -1, -1));
+
+        Tipo.setFont(new java.awt.Font("Segoe UI Semibold", 1, 20)); // NOI18N
         Tipo.setForeground(new java.awt.Color(51, 51, 51));
         Tipo.setText("Tipo:");
-        getContentPane().add(Tipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 120, -1, -1));
+        getContentPane().add(Tipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 180, -1, -1));
 
-        Tamaño.setFont(new java.awt.Font("Segoe UI Semibold", 1, 26)); // NOI18N
+        Tamaño.setFont(new java.awt.Font("Segoe UI Semibold", 1, 20)); // NOI18N
         Tamaño.setForeground(new java.awt.Color(51, 51, 51));
         Tamaño.setText("Tamaño:");
-        getContentPane().add(Tamaño, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 170, -1, -1));
+        getContentPane().add(Tamaño, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 220, -1, -1));
 
-        Marca.setFont(new java.awt.Font("Segoe UI Semibold", 1, 26)); // NOI18N
+        Marca.setFont(new java.awt.Font("Segoe UI Semibold", 1, 20)); // NOI18N
         Marca.setForeground(new java.awt.Color(51, 51, 51));
         Marca.setText("Marca:");
-        getContentPane().add(Marca, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 220, -1, -1));
+        getContentPane().add(Marca, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 260, -1, -1));
 
-        Precio.setFont(new java.awt.Font("Segoe UI Semibold", 1, 26)); // NOI18N
+        Precio.setFont(new java.awt.Font("Segoe UI Semibold", 1, 20)); // NOI18N
         Precio.setForeground(new java.awt.Color(51, 51, 51));
         Precio.setText("Precio:");
-        getContentPane().add(Precio, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 270, -1, -1));
+        getContentPane().add(Precio, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 300, -1, -1));
 
-        Cantidad.setFont(new java.awt.Font("Segoe UI Semibold", 1, 26)); // NOI18N
+        Cantidad.setFont(new java.awt.Font("Segoe UI Semibold", 1, 20)); // NOI18N
         Cantidad.setForeground(new java.awt.Color(51, 51, 51));
         Cantidad.setText("Cantidad:");
-        getContentPane().add(Cantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 320, -1, -1));
+        getContentPane().add(Cantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 340, -1, -1));
 
         TextoCodigo.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
         TextoCodigo.setText("...");
-        getContentPane().add(TextoCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 30, -1, -1));
+        getContentPane().add(TextoCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, 40, -1));
 
         TextFieldNombre.setBackground(new java.awt.Color(217, 217, 217));
         TextFieldNombre.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
@@ -206,55 +223,88 @@ public class RegistroDeProductos extends javax.swing.JFrame {
                 TextFieldNombreActionPerformed(evt);
             }
         });
-        getContentPane().add(TextFieldNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 80, 270, 20));
+        getContentPane().add(TextFieldNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 60, 310, 20));
+
+        TextFieldCodigoArticulo.setBackground(new java.awt.Color(217, 217, 217));
+        TextFieldCodigoArticulo.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        TextFieldCodigoArticulo.setForeground(new java.awt.Color(51, 51, 51));
+        TextFieldCodigoArticulo.setBorder(null);
+        TextFieldCodigoArticulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TextFieldCodigoArticuloActionPerformed(evt);
+            }
+        });
+        getContentPane().add(TextFieldCodigoArticulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 100, 250, 20));
+
+        TextFieldNombreArticulo.setBackground(new java.awt.Color(217, 217, 217));
+        TextFieldNombreArticulo.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        TextFieldNombreArticulo.setForeground(new java.awt.Color(51, 51, 51));
+        TextFieldNombreArticulo.setBorder(null);
+        TextFieldNombreArticulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TextFieldNombreArticuloActionPerformed(evt);
+            }
+        });
+        getContentPane().add(TextFieldNombreArticulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 140, 240, 20));
 
         ComboBoxTipo.setBackground(new java.awt.Color(217, 217, 217));
         ComboBoxTipo.setForeground(new java.awt.Color(51, 51, 51));
         ComboBoxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bicicleta", "Accesorios", "Suplementos" }));
-        getContentPane().add(ComboBoxTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 130, 330, -1));
+        ComboBoxTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboBoxTipoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(ComboBoxTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 180, 370, -1));
 
         TextFieldTamaño.setBackground(new java.awt.Color(217, 217, 217));
         TextFieldTamaño.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
         TextFieldTamaño.setForeground(new java.awt.Color(51, 51, 51));
         TextFieldTamaño.setBorder(null);
-        getContentPane().add(TextFieldTamaño, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 180, 280, 20));
+        getContentPane().add(TextFieldTamaño, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 220, 320, 20));
 
         TextFieldMarca.setBackground(new java.awt.Color(217, 217, 217));
         TextFieldMarca.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
         TextFieldMarca.setForeground(new java.awt.Color(51, 51, 51));
         TextFieldMarca.setBorder(null);
-        getContentPane().add(TextFieldMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 230, 300, 20));
+        getContentPane().add(TextFieldMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 260, 330, 20));
 
         TextFieldPrecio.setBackground(new java.awt.Color(217, 217, 217));
         TextFieldPrecio.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
         TextFieldPrecio.setForeground(new java.awt.Color(51, 51, 51));
         TextFieldPrecio.setBorder(null);
-        getContentPane().add(TextFieldPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 280, 300, 20));
+        getContentPane().add(TextFieldPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 300, 330, 20));
 
         TextFieldCantidad.setBackground(new java.awt.Color(217, 217, 217));
         TextFieldCantidad.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
         TextFieldCantidad.setForeground(new java.awt.Color(51, 51, 51));
         TextFieldCantidad.setBorder(null);
-        getContentPane().add(TextFieldCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 330, 270, 20));
+        getContentPane().add(TextFieldCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 340, 310, 20));
 
         FondoCodigo.setForeground(new java.awt.Color(51, 51, 51));
         FondoCodigo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Campo a llenar.png"))); // NOI18N
-        getContentPane().add(FondoCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 30, 300, 30));
+        getContentPane().add(FondoCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 330, 30));
 
         FondoNombre.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Campo a llenar.png"))); // NOI18N
-        getContentPane().add(FondoNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 80, -1, 30));
+        getContentPane().add(FondoNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 60, 330, 30));
+
+        FondoCodigoArticulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Campo a llenar.png"))); // NOI18N
+        getContentPane().add(FondoCodigoArticulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 100, 270, 30));
+
+        FondoNombreArticulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Campo a llenar.png"))); // NOI18N
+        getContentPane().add(FondoNombreArticulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 140, 260, 30));
 
         FondoTamaño.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Campo a llenar.png"))); // NOI18N
-        getContentPane().add(FondoTamaño, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 180, 300, 30));
+        getContentPane().add(FondoTamaño, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 220, 340, 30));
 
         FondoMarca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Campo a llenar.png"))); // NOI18N
-        getContentPane().add(FondoMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 230, 320, 30));
+        getContentPane().add(FondoMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 260, 350, 30));
 
         FondoPrecio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Campo a llenar.png"))); // NOI18N
-        getContentPane().add(FondoPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 280, 320, 30));
+        getContentPane().add(FondoPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 300, 350, 30));
 
         FondoCantidad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Campo a llenar.png"))); // NOI18N
-        getContentPane().add(FondoCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 330, 290, 30));
+        getContentPane().add(FondoCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 340, 330, 30));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -276,6 +326,18 @@ public class RegistroDeProductos extends javax.swing.JFrame {
     private void TextFieldNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextFieldNombreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_TextFieldNombreActionPerformed
+
+    private void ComboBoxTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxTipoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboBoxTipoActionPerformed
+
+    private void TextFieldCodigoArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextFieldCodigoArticuloActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TextFieldCodigoArticuloActionPerformed
+
+    private void TextFieldNombreArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextFieldNombreArticuloActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TextFieldNombreArticuloActionPerformed
 
     /**
      * @param args the command line arguments
@@ -319,12 +381,15 @@ public class RegistroDeProductos extends javax.swing.JFrame {
     private javax.swing.JButton Buscar;
     private javax.swing.JLabel Cantidad;
     private javax.swing.JLabel Codigo;
+    private javax.swing.JLabel CodigoArticulo;
     private javax.swing.JComboBox<String> ComboBoxTipo;
     private javax.swing.JButton Eliminar;
     private javax.swing.JLabel FondoCantidad;
     private javax.swing.JLabel FondoCodigo;
+    private javax.swing.JLabel FondoCodigoArticulo;
     private javax.swing.JLabel FondoMarca;
     private javax.swing.JLabel FondoNombre;
+    private javax.swing.JLabel FondoNombreArticulo;
     private javax.swing.JLabel FondoPrecio;
     private javax.swing.JLabel FondoTamaño;
     private javax.swing.JLabel Linea;
@@ -334,14 +399,17 @@ public class RegistroDeProductos extends javax.swing.JFrame {
     private javax.swing.JLabel Marca;
     private javax.swing.JButton Modificar;
     private javax.swing.JLabel Nombre;
+    private javax.swing.JLabel NombreArticulo;
     private javax.swing.JLabel Precio;
     private javax.swing.JLabel Productos;
     private javax.swing.JLabel ProductosLogo;
     private javax.swing.JLabel Registro;
     private javax.swing.JLabel Tamaño;
     private javax.swing.JTextField TextFieldCantidad;
+    private javax.swing.JTextField TextFieldCodigoArticulo;
     private javax.swing.JTextField TextFieldMarca;
     private javax.swing.JTextField TextFieldNombre;
+    private javax.swing.JTextField TextFieldNombreArticulo;
     private javax.swing.JTextField TextFieldPrecio;
     private javax.swing.JTextField TextFieldTamaño;
     private javax.swing.JLabel TextoCodigo;
