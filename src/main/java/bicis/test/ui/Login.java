@@ -11,7 +11,7 @@ import java.awt.Color;
 /**
  * Clase que implementa la interfaz gráfica de inicio de sesión para la aplicación CicloTEC.
  * Permite a los usuarios autenticarse con un ID y una contraseña para acceder al menú principal
- * o agregar nuevos usuarios mediante el botón "Nuevo".
+ * o agregar nuevos usuarios mediante el botón "Agregar Usuario".
  * 
  * @author gabob
  */
