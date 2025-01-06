@@ -4,16 +4,24 @@
  */
 package bicis.test.ui.UI;
 
+import bicis.test.ui.DetalleFactura;
 import bicis.test.ui.UI.MenuPrincipal;
 import bicis.test.ui.Utilidades;
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import bicis.test.ui.Facturación;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author gabob
- */
+/*
+* Constructor de la clase Facturacion.
+* Inicializa los componentes de la interfaz y configura la tabla de detalles.
+*/
 public class Facturacion extends javax.swing.JFrame {
+    private List<DetalleFactura> detalles = new ArrayList<>();
+    private DefaultTableModel modeloTabla;
 
     /**
      * Creates new form MenuPrincipal
@@ -21,10 +29,11 @@ public class Facturacion extends javax.swing.JFrame {
 
     public Facturacion() {
         initComponents();
+        configurarTablaDetalles();
         
         //El array de los JLabels
         JLabel[] labels = {LogoCicloTEC, FacturacionLogo,FondoFactura,
-        FondoRecibido,FondoSubtotal,FondoDetalle,FondoImpuesto,FondoTotal};
+        FondoCliente,FondoSubtotal,FondoImpuesto,FondoTotal};
         
         //Ponerle color JLabel del fondo (Gris Oscuro)
         Color col = new Color(152, 151, 153);
@@ -57,7 +66,7 @@ public class Facturacion extends javax.swing.JFrame {
         LineaHorizontal2 = new javax.swing.JLabel();
         Back = new javax.swing.JButton();
         Buscar = new javax.swing.JButton();
-        Agregar = new javax.swing.JButton();
+        AgregarDetalle = new javax.swing.JButton();
         Modificar = new javax.swing.JButton();
         NoFactura = new javax.swing.JLabel();
         Cliente = new javax.swing.JLabel();
@@ -67,20 +76,22 @@ public class Facturacion extends javax.swing.JFrame {
         Impuesto = new javax.swing.JLabel();
         Total = new javax.swing.JLabel();
         Detalle = new javax.swing.JLabel();
-        TextoFactura = new javax.swing.JLabel();
-        TextoTotal = new javax.swing.JComboBox<>();
-        TextFieldRecibido = new javax.swing.JTextField();
+        TextFieldCliente = new javax.swing.JTextField();
         ComboBoxEstado = new javax.swing.JComboBox<>();
         TextoSubtotal = new javax.swing.JLabel();
         TextoImpuesto = new javax.swing.JLabel();
         Texto1 = new javax.swing.JLabel();
-        TextFieldDetalle = new javax.swing.JTextField();
-        FondoFactura = new javax.swing.JLabel();
-        FondoRecibido = new javax.swing.JLabel();
+        FondoCliente = new javax.swing.JLabel();
         FondoSubtotal = new javax.swing.JLabel();
         FondoImpuesto = new javax.swing.JLabel();
+        TextFieldNumero = new javax.swing.JTextField();
+        FondoFactura = new javax.swing.JLabel();
         FondoTotal = new javax.swing.JLabel();
-        FondoDetalle = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        Agregar = new javax.swing.JButton();
+        TextFieldRecibido = new javax.swing.JTextField();
+        FondoRecibido = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Registro de Facturación - CicloTEC");
@@ -125,13 +136,23 @@ public class Facturacion extends javax.swing.JFrame {
         Buscar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 20)); // NOI18N
         Buscar.setForeground(new java.awt.Color(51, 51, 51));
         Buscar.setText("Buscar");
-        getContentPane().add(Buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 400, 130, 40));
+        Buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BuscarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(Buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 460, 130, 40));
 
-        Agregar.setBackground(new java.awt.Color(217, 217, 217));
-        Agregar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 20)); // NOI18N
-        Agregar.setForeground(new java.awt.Color(51, 51, 51));
-        Agregar.setText("Agregar");
-        getContentPane().add(Agregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 370, 130, 40));
+        AgregarDetalle.setBackground(new java.awt.Color(217, 217, 217));
+        AgregarDetalle.setFont(new java.awt.Font("Segoe UI Semibold", 0, 20)); // NOI18N
+        AgregarDetalle.setForeground(new java.awt.Color(51, 51, 51));
+        AgregarDetalle.setText("AgregarDetalle");
+        AgregarDetalle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AgregarDetalleActionPerformed(evt);
+            }
+        });
+        getContentPane().add(AgregarDetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 410, 170, 30));
 
         Modificar.setBackground(new java.awt.Color(217, 217, 217));
         Modificar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 20)); // NOI18N
@@ -142,12 +163,12 @@ public class Facturacion extends javax.swing.JFrame {
                 ModificarActionPerformed(evt);
             }
         });
-        getContentPane().add(Modificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 370, 130, 40));
+        getContentPane().add(Modificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 460, 130, 40));
 
         NoFactura.setFont(new java.awt.Font("Segoe UI Semibold", 1, 22)); // NOI18N
         NoFactura.setForeground(new java.awt.Color(51, 51, 51));
         NoFactura.setText("No. Factura:");
-        getContentPane().add(NoFactura, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 40, -1, -1));
+        getContentPane().add(NoFactura, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 40, -1, -1));
 
         Cliente.setFont(new java.awt.Font("Segoe UI Semibold", 1, 22)); // NOI18N
         Cliente.setForeground(new java.awt.Color(51, 51, 51));
@@ -184,25 +205,16 @@ public class Facturacion extends javax.swing.JFrame {
         Detalle.setText("Detalle:");
         getContentPane().add(Detalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 320, -1, -1));
 
-        TextoFactura.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
-        TextoFactura.setText("...");
-        getContentPane().add(TextoFactura, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 50, -1, -1));
-
-        TextoTotal.setBackground(new java.awt.Color(217, 217, 217));
-        TextoTotal.setForeground(new java.awt.Color(51, 51, 51));
-        TextoTotal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-Búsqueda por nombre-" }));
-        getContentPane().add(TextoTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 80, 330, 30));
-
-        TextFieldRecibido.setBackground(new java.awt.Color(217, 217, 217));
-        TextFieldRecibido.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
-        TextFieldRecibido.setForeground(new java.awt.Color(51, 51, 51));
-        TextFieldRecibido.setBorder(null);
-        TextFieldRecibido.addActionListener(new java.awt.event.ActionListener() {
+        TextFieldCliente.setBackground(new java.awt.Color(217, 217, 217));
+        TextFieldCliente.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        TextFieldCliente.setForeground(new java.awt.Color(51, 51, 51));
+        TextFieldCliente.setBorder(null);
+        TextFieldCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TextFieldRecibidoActionPerformed(evt);
+                TextFieldClienteActionPerformed(evt);
             }
         });
-        getContentPane().add(TextFieldRecibido, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 120, 210, 20));
+        getContentPane().add(TextFieldCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 80, 210, 20));
 
         ComboBoxEstado.setBackground(new java.awt.Color(217, 217, 217));
         ComboBoxEstado.setForeground(new java.awt.Color(51, 51, 51));
@@ -221,18 +233,8 @@ public class Facturacion extends javax.swing.JFrame {
         Texto1.setText("...");
         getContentPane().add(Texto1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 280, -1, -1));
 
-        TextFieldDetalle.setBackground(new java.awt.Color(217, 217, 217));
-        TextFieldDetalle.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
-        TextFieldDetalle.setForeground(new java.awt.Color(51, 51, 51));
-        TextFieldDetalle.setBorder(null);
-        getContentPane().add(TextFieldDetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 320, 320, 20));
-
-        FondoFactura.setForeground(new java.awt.Color(51, 51, 51));
-        FondoFactura.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Campo a llenar.png"))); // NOI18N
-        getContentPane().add(FondoFactura, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 40, 280, 40));
-
-        FondoRecibido.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Campo a llenar.png"))); // NOI18N
-        getContentPane().add(FondoRecibido, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 120, 220, 30));
+        FondoCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Campo a llenar.png"))); // NOI18N
+        getContentPane().add(FondoCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 80, 220, 30));
 
         FondoSubtotal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Campo a llenar.png"))); // NOI18N
         getContentPane().add(FondoSubtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 200, 320, 30));
@@ -240,11 +242,63 @@ public class Facturacion extends javax.swing.JFrame {
         FondoImpuesto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Campo a llenar.png"))); // NOI18N
         getContentPane().add(FondoImpuesto, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 240, 310, 30));
 
+        TextFieldNumero.setBackground(new java.awt.Color(217, 217, 217));
+        TextFieldNumero.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        TextFieldNumero.setForeground(new java.awt.Color(51, 51, 51));
+        TextFieldNumero.setBorder(null);
+        TextFieldNumero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TextFieldNumeroActionPerformed(evt);
+            }
+        });
+        getContentPane().add(TextFieldNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 40, 180, 30));
+
+        FondoFactura.setForeground(new java.awt.Color(51, 51, 51));
+        FondoFactura.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Campo a llenar.png"))); // NOI18N
+        getContentPane().add(FondoFactura, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 40, 190, 40));
+
         FondoTotal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Campo a llenar.png"))); // NOI18N
         getContentPane().add(FondoTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 280, 350, 30));
 
-        FondoDetalle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Campo a llenar.png"))); // NOI18N
-        getContentPane().add(FondoDetalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 320, 330, -1));
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "CodigoArticulo", "Cantidad", "PrecioUnitario", "Total"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable2);
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 320, 340, 80));
+
+        Agregar.setBackground(new java.awt.Color(217, 217, 217));
+        Agregar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 20)); // NOI18N
+        Agregar.setForeground(new java.awt.Color(51, 51, 51));
+        Agregar.setText("Agregar");
+        Agregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AgregarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(Agregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 460, 130, 40));
+
+        TextFieldRecibido.setBackground(new java.awt.Color(217, 217, 217));
+        TextFieldRecibido.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        TextFieldRecibido.setForeground(new java.awt.Color(51, 51, 51));
+        TextFieldRecibido.setBorder(null);
+        TextFieldRecibido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TextFieldRecibidoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(TextFieldRecibido, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 120, 210, 20));
+
+        FondoRecibido.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Campo a llenar.png"))); // NOI18N
+        getContentPane().add(FondoRecibido, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 120, 220, 30));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -255,9 +309,181 @@ public class Facturacion extends javax.swing.JFrame {
         dispose(); //Cerrar Facturacion
     }//GEN-LAST:event_BackActionPerformed
 
+    /*
+     * Configura la tabla de detalles de facturación.
+     */
+    private void configurarTablaDetalles() {
+        modeloTabla = new DefaultTableModel(new Object[]{"Código Artículo", "Cantidad", "Precio Unitario", "Total"}, 0);
+        jTable2.setModel(modeloTabla);
+    }
+    
+    /*
+     * Limpia todos los campos de entrada y resetea la tabla de detalles.
+     */
+    private void limpiarCampos() {
+        TextFieldNumero.setText("");
+        TextFieldCliente.setText("");
+        TextFieldRecibido.setText("");
+        ComboBoxEstado.setSelectedIndex(0);
+        detalles.clear();
+        modeloTabla.setRowCount(0); // Limpia la tabla
+    }
+    
+    /*
+     * Calcula el subtotal de la factura sumando los totales de los detalles.
+     *
+     * @return el subtotal de la factura.
+     */
+    private int calcularSubtotal() {
+        int subtotal = 0;
+        for (DetalleFactura detalle : detalles) {
+            subtotal += detalle.getTotal();
+        }
+        return subtotal;
+    }
+    
+    /*
+     * Maneja la acción del botón de anular factura.
+     * Busca la factura por número y cambia su estado a "Anulado" si no está ya anulada.
+     *
+     * @param evento de acción.
+     */
     private void ModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModificarActionPerformed
-        // TODO add your handling code here:
+        try {
+            int numeroFactura = Integer.parseInt(TextFieldNumero.getText());
+            Facturación factura = Facturación.buscarFactura(numeroFactura); // para buscar la factura que se desea eliminar
+            // si la factura existe y ademas no esta ya anulada
+            if (factura != null && factura.getEstado() != Facturación.EstadoFacturación.ANULADO) {
+                int confirmacion = JOptionPane.showConfirmDialog(this,
+                    "¿Está seguro de que desea anular la factura con número " + numeroFactura + "?",
+                    "Confirmar anulación",
+                    JOptionPane.YES_NO_OPTION);
+                //confirmacion
+                if (confirmacion == JOptionPane.YES_OPTION) {
+                    Facturación.anularFactura(numeroFactura);
+                    ComboBoxEstado.setSelectedItem(Facturación.EstadoFacturación.ANULADO.toString());
+                    JOptionPane.showMessageDialog(this, "Factura anulada correctamente.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Factura no encontrada o ya está anulada.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al anular factura: " + e.getMessage());
+        }
     }//GEN-LAST:event_ModificarActionPerformed
+
+    private void TextFieldClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextFieldClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TextFieldClienteActionPerformed
+
+    
+   /*
+     * Maneja la acción del botón para agregar un detalle a la factura.
+     *
+     * @param evento de acción.
+     */    
+    private void AgregarDetalleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarDetalleActionPerformed
+        try {
+            int codigoArticulo = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el código del artículo:"));
+            int cantidad = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad:"));
+            int precioUnitario = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el precio unitario:"));
+            int total = cantidad * precioUnitario;
+
+            // Crear detalle
+            DetalleFactura detalle = new DetalleFactura(codigoArticulo, 0, cantidad, precioUnitario, total);
+            detalles.add(detalle);
+
+            // Agregar a la tabla
+            modeloTabla.addRow(new Object[]{codigoArticulo, cantidad, precioUnitario, total});
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al agregar detalle: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_AgregarDetalleActionPerformed
+
+    private void TextFieldNumeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextFieldNumeroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TextFieldNumeroActionPerformed
+
+    
+    /*
+     * Maneja la acción del botón para buscar una factura por su número.
+     *
+     * @param evento de acción.
+     */
+    private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
+        try {
+            // usando el codigo se utiliza el metodo de buscar para encontrar la factura
+            int numeroFactura = Integer.parseInt(TextFieldNumero.getText());
+            Facturación factura = Facturación.buscarFactura(numeroFactura);
+            
+            // si la factura existe entonces pone los valores en los campos de la factura que se busco.
+            if (factura != null) {
+                TextFieldCliente.setText(String.valueOf(factura.getCodigoCliente()));
+                TextFieldRecibido.setText(factura.getFechaRecibido());
+                if (factura.getEstado() == Facturación.EstadoFacturación.VALIDO) {
+                    ComboBoxEstado.setSelectedItem("Válido");
+                } else if (factura.getEstado() == Facturación.EstadoFacturación.ANULADO) {
+                    ComboBoxEstado.setSelectedItem("Anulado");
+                }
+                TextoSubtotal.setText(String.valueOf(factura.getSubtotal()));
+                TextoImpuesto.setText(String.valueOf(factura.getImpuesto()));
+                Texto1.setText(String.valueOf(factura.getTotal()));
+                JOptionPane.showMessageDialog(this, "Factura encontrada.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Factura no encontrada.", "Error", JOptionPane.ERROR_MESSAGE);
+                limpiarCampos();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al buscar factura: " + e.getMessage());
+        }
+    }//GEN-LAST:event_BuscarActionPerformed
+
+   /*
+     * Maneja la acción del botón para agregar una factura.
+     *
+     * @param evt evento de acción.
+     */
+    private void AgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarActionPerformed
+        try {
+            // Validar
+            if (TextFieldRecibido.getText().isEmpty() || TextFieldCliente.getText().isEmpty() || 
+                TextoSubtotal.getText().isEmpty() || TextoImpuesto.getText().isEmpty() || 
+                Texto1.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (!TextFieldNumero.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "El campo de código no debe tener un valor al agregar una factura. Se genera automáticamente.",
+                    "Error en el código",
+                    JOptionPane.ERROR_MESSAGE);
+                return; // Salir del método
+            }
+            if (modeloTabla.getRowCount() == 0) {
+               JOptionPane.showMessageDialog(this, "Debe agregar al menos un detalle a la factura.", "Error", JOptionPane.ERROR_MESSAGE);
+               return;
+           }           
+
+            // Generar número de factura automáticamente y conseguir todos los valores de los campos
+            int numeroFactura = Facturación.generarNumeroFactura();
+            int codigoCliente = Integer.parseInt(TextFieldCliente.getText());
+            String fechaRecibido = TextFieldRecibido.getText();
+            Facturación.EstadoFacturación estado = Facturación.EstadoFacturación.VALIDO;
+            int subtotal = calcularSubtotal();
+            int impuesto = (int) (subtotal * 0.13);
+            int total = subtotal + impuesto;
+
+            //se crea la factura y se llama al metodo de agregar
+            Facturación nuevaFactura = new Facturación(numeroFactura, codigoCliente, fechaRecibido, estado, subtotal, impuesto, total, detalles);
+            Facturación.agregarFactura(nuevaFactura);
+
+            JOptionPane.showMessageDialog(this, "Factura agregada correctamente.");
+            limpiarCampos();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al agregar factura: " + e.getMessage());
+        }
+    }//GEN-LAST:event_AgregarActionPerformed
 
     private void TextFieldRecibidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextFieldRecibidoActionPerformed
         // TODO add your handling code here:
@@ -303,6 +529,7 @@ public class Facturacion extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Agregar;
+    private javax.swing.JButton AgregarDetalle;
     private javax.swing.JButton Back;
     private javax.swing.JButton Buscar;
     private javax.swing.JLabel Cliente;
@@ -311,7 +538,7 @@ public class Facturacion extends javax.swing.JFrame {
     private javax.swing.JLabel Estado;
     private javax.swing.JLabel FacturacionLogo;
     private javax.swing.JLabel FechaRec;
-    private javax.swing.JLabel FondoDetalle;
+    private javax.swing.JLabel FondoCliente;
     private javax.swing.JLabel FondoFactura;
     private javax.swing.JLabel FondoImpuesto;
     private javax.swing.JLabel FondoRecibido;
@@ -326,13 +553,14 @@ public class Facturacion extends javax.swing.JFrame {
     private javax.swing.JLabel NoFactura;
     private javax.swing.JLabel Registro;
     private javax.swing.JLabel Subtotal;
-    private javax.swing.JTextField TextFieldDetalle;
+    private javax.swing.JTextField TextFieldCliente;
+    private javax.swing.JTextField TextFieldNumero;
     private javax.swing.JTextField TextFieldRecibido;
     private javax.swing.JLabel Texto1;
-    private javax.swing.JLabel TextoFactura;
     private javax.swing.JLabel TextoImpuesto;
     private javax.swing.JLabel TextoSubtotal;
-    private javax.swing.JComboBox<String> TextoTotal;
     private javax.swing.JLabel Total;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable2;
     // End of variables declaration//GEN-END:variables
 }
