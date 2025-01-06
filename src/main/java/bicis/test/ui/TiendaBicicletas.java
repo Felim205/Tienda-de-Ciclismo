@@ -67,26 +67,84 @@ public class TiendaBicicletas {
         this.servicio = servicio;
     }
     
-    //Metodos
-    public void registrarUsuario(Usuario nuevoUsuario){
-    
+//Metodo Usuario
+    public void registrarUsuario(Usuario nuevoUsuario) {
+        if (nuevoUsuario == null) {
+            System.out.println("El usuario no puede ser nulo.");
+            return;
+        }
+
+        for (Usuario u : this.usuario) {
+            if (u.getNombre().equalsIgnoreCase(nuevoUsuario.getNombre())) {
+                System.out.println("Ya existe un usuario con el nombre: " + nuevoUsuario.getNombre());
+                return;
+            }
+        }
+
+        this.usuario.add(nuevoUsuario);
+        System.out.println("Usuario registrado exitosamente: " + nuevoUsuario);
     }
     
+    //Metodos Cliente
     public void registrarCliente(Cliente nuevoCliente) {
-
+        if (nuevoCliente != null) {
+            this.cliente.add(nuevoCliente);
+            System.out.println("Cliente registrado exitosamente: " + nuevoCliente);
+        } else {
+            System.out.println("El cliente no puede ser nulo.");
+        }
     }
     
     public Cliente buscarCliente(int codigo, String nombre, String apellido) {
+        for (Cliente c : this.cliente) {
+            if (c.getCodigo() == codigo || 
+                c.getNombre().equalsIgnoreCase(nombre) || 
+                c.getApellido().equalsIgnoreCase(apellido)) {
+                return c;
+            }
+        }
+        System.out.println("Cliente no encontrado.");
         return null;
     }
     
     public void editarCliente(Cliente clienteEditado){
-    
+        if (clienteEditado != null) {
+        for (Cliente c : this.cliente) {
+            if (c.getCodigo() == clienteEditado.getCodigo()) {
+                c.setNombre(clienteEditado.getNombre());
+                c.setApellido(clienteEditado.getApellido());
+                c.setTelefono(clienteEditado.getTelefono());
+                c.setCorreo(clienteEditado.getCorreo());
+                c.setProvincia(clienteEditado.getProvincia());
+                c.setCanton(clienteEditado.getCanton());
+                c.setDistrito(clienteEditado.getDistrito());
+                c.setFechaNacimiento(clienteEditado.getFechaNacimiento());
+                System.out.println("Cliente editado exitosamente: " + c);
+                return;
+            }
+        }
+        System.out.println("Cliente no encontrado para editar.");
+    } else {
+        System.out.println("El cliente editado no puede ser nulo.");
+    }
     }
     
     public void eliminarCliente(int Codigo){
-    
+        Cliente clienteAEliminar = null;
+        for (Cliente c : this.cliente) {
+            if (c.getCodigo() == Codigo) {
+                clienteAEliminar = c;
+                break;
+            }
+        }
+        if (clienteAEliminar != null) {
+            this.cliente.remove(clienteAEliminar);
+            System.out.println("Cliente eliminado exitosamente: " + clienteAEliminar);
+        } else {
+            System.out.println("Cliente no encontrado para eliminar.");
+        }
     }
+    
     
     public void agregarProducto(Producto nuevoPoroducto){
 

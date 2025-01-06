@@ -7,13 +7,16 @@ package bicis.test.ui.UI;
 import bicis.test.ui.Utilidades;
 import java.awt.Color;
 import javax.swing.JLabel;
+import bicis.test.ui.Cliente;
+import bicis.test.ui.TiendaBicicletas;
 
 /**
  *
  * @author gabob
  */
-public class RegistroDeClientes extends javax.swing.JFrame {
 
+public class RegistroDeClientes extends javax.swing.JFrame {
+    
     /**
      * Creates new form MenuPrincipal
      */
@@ -135,6 +138,11 @@ public class RegistroDeClientes extends javax.swing.JFrame {
         Agregar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         Agregar.setForeground(new java.awt.Color(51, 51, 51));
         Agregar.setText("Agregar");
+        Agregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AgregarActionPerformed(evt);
+            }
+        });
         getContentPane().add(Agregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 380, 120, 30));
 
         Buscar.setBackground(new java.awt.Color(217, 217, 217));
@@ -311,6 +319,127 @@ public class RegistroDeClientes extends javax.swing.JFrame {
     private void TextFieldNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextFieldNombreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_TextFieldNombreActionPerformed
+
+    private void AgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarActionPerformed
+
+        TiendaBicicletas tienda = new TiendaBicicletas();
+
+        try {
+            // Obtener los valores de los campos de texto
+            String nombre = TextFieldNombre.getText().trim();
+            String apellidos = TextFieldApellidos.getText().trim();
+            String telefonoStr = TextFieldTeléfono.getText().trim();
+            String correo = TextFieldEmail.getText().trim();
+            String canton = TextFieldCanton.getText().trim();
+            String distrito = TextFieldDistrito.getText().trim();
+
+            // Validar que los campos no estén vacíos
+            if (nombre.isEmpty() || apellidos.isEmpty() || telefonoStr.isEmpty() || 
+                correo.isEmpty() || canton.isEmpty() || distrito.isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this, 
+                    "Todos los campos son obligatorios", 
+                    "Error", 
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Convertir teléfono a entero
+            int telefono;
+            try {
+                telefono = Integer.parseInt(telefonoStr);
+            } catch (NumberFormatException e) {
+                javax.swing.JOptionPane.showMessageDialog(this, 
+                    "El teléfono debe ser un número válido", 
+                    "Error", 
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Obtener la provincia del ComboBox
+            String provinciaStr = (String) ComboBoxProvincia.getSelectedItem();
+            Cliente.Provincia provincia = Cliente.Provincia.valueOf(provinciaStr.toUpperCase().replace(" ", "_"));
+
+            // Obtener la fecha de nacimiento
+            java.util.Date fechaNacimiento;
+            try {
+                fechaNacimiento = new java.text.SimpleDateFormat("dd/MM/yyyy")
+                    .parse(TextFieldCantidad2.getText().trim());
+            } catch (java.text.ParseException e) {
+                javax.swing.JOptionPane.showMessageDialog(this, 
+                    "Formato de fecha inválido. Use dd/MM/yyyy", 
+                    "Error", 
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Crear nuevo cliente
+            Cliente nuevoCliente = new Cliente(
+                0, 
+                nombre, 
+                apellidos, 
+                telefono, 
+                correo, 
+                provincia, 
+                canton, 
+                distrito, 
+                fechaNacimiento
+            );
+
+            // Validar correo
+            try {
+                nuevoCliente.validarCorreo(correo);
+            } catch (IllegalArgumentException e) {
+                javax.swing.JOptionPane.showMessageDialog(this, 
+                    "Correo electrónico inválido", 
+                    "Error", 
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Validar fecha de nacimiento
+            try {
+                nuevoCliente.validarFecha(fechaNacimiento);
+            } catch (IllegalArgumentException e) {
+                javax.swing.JOptionPane.showMessageDialog(this, 
+                    "Fecha de nacimiento inválida", 
+                    "Error", 
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Registrar cliente en la tienda
+            tienda.registrarCliente(nuevoCliente);
+
+            // Mostrar mensaje de éxito
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                "Cliente registrado exitosamente\nCódigo: " + nombre, 
+                "Registro Exitoso", 
+                javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+            // Limpiar campos después del registro
+            limpiarCampos();
+
+        } catch (Exception e) {
+            // Manejo de cualquier otra excepción inesperada
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                "Error al registrar cliente: " + e.getMessage(), 
+                "Error", 
+                javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Método para limpiar los campos después del registro
+    private void limpiarCampos() {
+        TextFieldNombre.setText("");
+        TextFieldApellidos.setText("");
+        TextFieldTeléfono.setText("");
+        TextFieldEmail.setText("");
+        TextFieldCanton.setText("");
+        TextFieldDistrito.setText("");
+        TextFieldCantidad2.setText("");
+        ComboBoxProvincia.setSelectedIndex(0);
+        TextoCodigo.setText("...");
+    }//GEN-LAST:event_AgregarActionPerformed
 
     /**
      * @param args the command line arguments

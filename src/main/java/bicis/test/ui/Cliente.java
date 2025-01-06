@@ -7,6 +7,9 @@ package bicis.test.ui;
 import java.util.Date;
 
 public class Cliente {
+    
+    private static int contadorCodigo = 0;
+    
     private int codigo;
     private String nombre;
     private String apellido;
@@ -22,7 +25,7 @@ public class Cliente {
     }
 
     public Cliente(int codigo, String nombre, String apellido, int telefono, String correo, Provincia provincia, String canton, String distrito, Date fechaNacimiento) {
-        this.codigo = codigo;
+        this.codigo = contadorCodigo++;
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
