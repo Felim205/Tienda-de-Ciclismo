@@ -151,6 +151,11 @@ public class RegistroDeClientes extends javax.swing.JFrame {
         Buscar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         Buscar.setForeground(new java.awt.Color(51, 51, 51));
         Buscar.setText("Buscar");
+        Buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BuscarActionPerformed(evt);
+            }
+        });
         getContentPane().add(Buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 410, 120, 30));
 
         Modificar.setBackground(new java.awt.Color(217, 217, 217));
@@ -382,7 +387,175 @@ public class RegistroDeClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_EliminarActionPerformed
 
     private void ModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModificarActionPerformed
-        // TODO add your handling code here:
+        // Verificar si hay clientes registrados
+        if (tienda.getClientes().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this, 
+                "No hay clientes registrados para modificar.", 
+                "Error", 
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+
+        // Crear un diálogo para seleccionar el cliente a modificar
+        String[] opcionesClientes = new String[tienda.getClientes().size()];
+        for (int i = 0; i < tienda.getClientes().size(); i++) {
+            Cliente cliente = tienda.getClientes().get(i);
+            opcionesClientes[i] = "Código: " + cliente.getCodigo() + 
+                                   " - Nombre: " + cliente.getNombre() + 
+                                   " " + cliente.getApellido();
+        }
+
+        // Mostrar diálogo de selección de cliente
+        String clienteSeleccionado = (String) javax.swing.JOptionPane.showInputDialog(
+            this,
+            "Seleccione el cliente a modificar:",
+            "Modificar Cliente",
+            javax.swing.JOptionPane.QUESTION_MESSAGE,
+            null,
+            opcionesClientes,
+            opcionesClientes[0]
+        );
+
+        // Si se cancela la selección
+        if (clienteSeleccionado == null) {
+            return;
+        }
+
+        // Extraer el código del cliente seleccionado
+        int codigoCliente = Integer.parseInt(clienteSeleccionado.split(" ")[1]);
+
+        // Buscar el cliente
+        Cliente cliente = tienda.buscarCliente(codigoCliente, null, null);
+
+        if (cliente == null) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this, 
+                "Cliente no encontrado.", 
+                "Error", 
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+
+        // Crear un diálogo de opciones de modificación
+        String[] opcionesModificacion = {
+            "Nombre", 
+            "Apellidos", 
+            "Teléfono", 
+            "Email", 
+            "Provincia", 
+            "Cantón", 
+            "Distrito", 
+            "Fecha de Nacimiento"
+        };
+
+        String opcionSeleccionada = (String) javax.swing.JOptionPane.showInputDialog(
+            this,
+            "Seleccione el campo a modificar:",
+            "Modificar Cliente",
+            javax.swing.JOptionPane.QUESTION_MESSAGE,
+            null,
+            opcionesModificacion,
+            opcionesModificacion[0]
+        );
+
+        // Si se cancela la selección
+        if (opcionSeleccionada == null) {
+            return;
+        }
+
+        // Mostrar información actual antes de modificar
+        String valorActual = "";
+        switch (opcionSeleccionada) {
+            case "Nombre":
+                valorActual = cliente.getNombre();
+                break;
+            case "Apellidos":
+                valorActual = cliente.getApellido();
+                break;
+            case "Teléfono":
+                valorActual = String.valueOf(cliente.getTelefono());
+                break;
+            case "Email":
+                valorActual = cliente.getCorreo();
+                break;
+            case "Provincia":
+                valorActual = cliente.getProvincia().toString();
+                break;
+            case "Cantón":
+                valorActual = cliente.getCanton();
+                break;
+            case "Distrito":
+                valorActual = cliente.getDistrito();
+                break;
+            case "Fecha de Nacimiento":
+                valorActual = new java.text.SimpleDateFormat("dd/MM/yyyy").format(cliente.getFechaNacimiento());
+                break;
+        }
+
+        // Solicitar nuevo valor
+        String nuevoValor = javax.swing.JOptionPane.showInputDialog(
+            this,
+            "Valor actual: " + valorActual + "\nIngrese el nuevo valor:",
+            "Modificar " + opcionSeleccionada,
+            javax.swing.JOptionPane.QUESTION_MESSAGE
+        );
+
+        // Si se cancela la modificación
+        if (nuevoValor == null || nuevoValor.trim().isEmpty()) {
+            return;
+        }
+
+        // Realizar la modificación según la opción seleccionada
+        try {
+            switch (opcionSeleccionada) {
+                case "Nombre":
+                    cliente.setNombre(nuevoValor);
+                    break;
+                case "Apellidos":
+                    cliente.setApellido(nuevoValor);
+                    break;
+                case "Teléfono":
+                    cliente.setTelefono(Integer.parseInt(nuevoValor));
+                    break;
+                case "Email":
+                    cliente.validarCorreo(nuevoValor);
+                    break;
+                case "Provincia":
+                    cliente.setProvincia(Cliente.Provincia.valueOf(nuevoValor.toUpperCase().replace(" ", "_")));
+                    break;
+                case "Cantón":
+                    cliente.setCanton(nuevoValor);
+                    break;
+                case "Distrito":
+                    cliente.setDistrito(nuevoValor);
+                    break;
+                case "Fecha de Nacimiento":
+                    java.util.Date fechaNueva = new java.text.SimpleDateFormat("dd/MM/yyyy").parse(nuevoValor);
+                    cliente.validarFecha(fechaNueva);
+                    break;
+            }
+
+            // Actualizar el cliente en la tienda
+            tienda.editarCliente(cliente);
+
+            javax.swing.JOptionPane.showMessageDialog(
+                this, 
+                opcionSeleccionada + " modificado exitosamente.", 
+                "Modificación Exitosa", 
+                javax.swing.JOptionPane.INFORMATION_MESSAGE
+            );
+
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this, 
+                "Error al modificar: " + e.getMessage(), 
+                "Error", 
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+        }
     }//GEN-LAST:event_ModificarActionPerformed
 
     private void TextFieldNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextFieldNombreActionPerformed
@@ -511,6 +684,101 @@ public class RegistroDeClientes extends javax.swing.JFrame {
     private void ComboBoxProvinciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxProvinciaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ComboBoxProvinciaActionPerformed
+
+    private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
+        // Crear un array de opciones de búsqueda
+        String[] opcionesBusqueda = {"Código", "Nombre", "Apellidos"};
+
+        // Diálogo de selección para el método de búsqueda
+        String metodoBusqueda = (String) javax.swing.JOptionPane.showInputDialog(
+            this,
+            "Seleccione el método de búsqueda:",
+            "Buscar Cliente",
+            javax.swing.JOptionPane.QUESTION_MESSAGE,
+            null,
+            opcionesBusqueda,
+            opcionesBusqueda[0]
+        );
+
+        // Si se cancela la selección, salir del método
+        if (metodoBusqueda == null) {
+            return;
+        }
+
+        // Solicitar el valor de búsqueda según el método seleccionado
+        String valorBusqueda = javax.swing.JOptionPane.showInputDialog(
+            this,
+            "Ingrese " + metodoBusqueda + " del cliente:",
+            "Buscar Cliente",
+            javax.swing.JOptionPane.QUESTION_MESSAGE
+        );
+
+        // Si se cancela la entrada, salir del método
+        if (valorBusqueda == null || valorBusqueda.trim().isEmpty()) {
+            return;
+        }
+
+        // Realizar la búsqueda según el método seleccionado
+        Cliente clienteEncontrado = null;
+
+        try {
+            switch (metodoBusqueda) {
+                case "Código" -> {
+                    int codigo = Integer.parseInt(valorBusqueda.trim());
+                    clienteEncontrado = tienda.buscarCliente(codigo, null, null);
+                }
+
+                case "Nombre" -> clienteEncontrado = tienda.buscarCliente(-1, valorBusqueda.trim(), null);
+
+                case "Apellidos" -> clienteEncontrado = tienda.buscarCliente(-1, null, valorBusqueda.trim());
+            }
+
+            // Mostrar el resultado de la búsqueda
+            if (clienteEncontrado != null) {
+                // Mostrar los detalles del cliente encontrado
+                String detallesCliente = "Código: " + clienteEncontrado.getCodigo() + "\n" +
+                                         "Nombre: " + clienteEncontrado.getNombre() + "\n" +
+                                         "Apellidos: " + clienteEncontrado.getApellido() + "\n" +
+                                         "Teléfono: " + clienteEncontrado.getTelefono() + "\n" +
+                                         "Email: " + clienteEncontrado.getCorreo() + "\n" +
+                                         "Provincia: " + clienteEncontrado.getProvincia() + "\n" +
+                                         "Cantón: " + clienteEncontrado.getCanton() + "\n" +
+                                         "Distrito: " + clienteEncontrado.getDistrito() + "\n" +
+                                         "Fecha de Nacimiento: " + 
+                                         new java.text.SimpleDateFormat("dd/MM/yyyy").format(clienteEncontrado.getFechaNacimiento());
+
+                javax.swing.JOptionPane.showMessageDialog(
+                    this, 
+                    detallesCliente, 
+                    "Cliente Encontrado", 
+                    javax.swing.JOptionPane.INFORMATION_MESSAGE
+                );
+
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(
+                    this, 
+                    "No se encontró ningún cliente con " + metodoBusqueda + ": " + valorBusqueda, 
+                    "Cliente No Encontrado", 
+                    javax.swing.JOptionPane.WARNING_MESSAGE
+                );
+            }
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this, 
+                "El código debe ser un número válido", 
+                "Error", 
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this, 
+                "Error al buscar cliente: " + e.getMessage(), 
+                "Error", 
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+        }
+   
+    }//GEN-LAST:event_BuscarActionPerformed
 
     /**
      * @param args the command line arguments
