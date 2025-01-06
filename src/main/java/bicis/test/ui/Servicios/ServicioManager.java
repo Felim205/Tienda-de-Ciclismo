@@ -28,14 +28,21 @@ public class ServicioManager {
     }
 
     /**
+     * Incrementa el contador de códigos de servicio al agregar un nuevo servicio.
+     */
+    public static void incrementarCodigoServicio() {
+        codigoServicioActual++;
+    }
+
+    /**
      * Agrega un nuevo servicio a la lista de servicios. Asigna un código único
      * al servicio antes de agregarlo.
      * 
      * @param servicio El servicio de mantenimiento a agregar.
      */
     public static void agregarServicio(ServicioMantenimiento servicio) {
-        servicio.setCodigoCliente(codigoServicioActual++);
         servicios.add(servicio);
+        incrementarCodigoServicio(); // Incrementa el código para el próximo servicio
     }
 
     /**

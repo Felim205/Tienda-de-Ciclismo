@@ -9,6 +9,13 @@ import java.util.Collection;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase que representa una tienda de bicicletas. 
+ * Permite la gestión de usuarios, clientes, productos y servicios.
+ * Incluye métodos para registrar, buscar, editar y eliminar elementos asociados a la tienda.
+ * 
+ * @author gabob
+ */
 public class TiendaBicicletas {
     private String nombreTienda;
     private Collection<Usuario> usuario;
@@ -16,65 +23,125 @@ public class TiendaBicicletas {
     private Collection<ServicioMantenimiento> servicio;
     private List<Cliente> clientes;
 
+    /**
+     * Constructor por defecto que inicializa las colecciones de la tienda.
+     */
     public TiendaBicicletas() {
         this.usuario = new ArrayList<>();
         this.clientes = new ArrayList<>();
         this.producto = new ArrayList<>();
         this.servicio = new ArrayList<>();
-        this.clientes = new ArrayList<>();
     }
     
+    /**
+     * Constructor que inicializa la tienda con un nombre.
+     * 
+     * @param nombreTienda Nombre de la tienda.
+     */
     public TiendaBicicletas(String nombreTienda) {
         this();
         this.nombreTienda = nombreTienda;
     }
-   
-
+    
+    // Métodos Getters y Setters
+    
+    /**
+     * Obtiene la lista de clientes registrados en la tienda.
+     * 
+     * @return Lista de clientes.
+     */
     public List<Cliente> getClientes() {
-        return clientes; // Método para obtener la lista de clientes
+        return clientes;
     }
 
+    /**
+     * Obtiene el nombre de la tienda.
+     * 
+     * @return Nombre de la tienda.
+     */
     public String getNombreTienda() {
         return nombreTienda;
     }
 
+    /**
+     * Obtiene la colección de usuarios registrados.
+     * 
+     * @return Colección de usuarios.
+     */
     public Collection<Usuario> getUsuario() {
         return usuario;
     }
 
-    public Collection<Cliente> getCliente() {
-        return clientes;
-    }
-
+    /**
+     * Obtiene la colección de productos registrados.
+     * 
+     * @return Colección de productos.
+     */
     public Collection<Producto> getProducto() {
         return producto;
     }
 
+    /**
+     * Obtiene la colección de servicios de mantenimiento registrados.
+     * 
+     * @return Colección de servicios.
+     */
     public Collection<ServicioMantenimiento> getServicio() {
         return servicio;
     }
     
+    /**
+     * Establece el nombre de la tienda.
+     * 
+     * @param nombreTienda Nombre de la tienda.
+     */
     public void setNombreTienda(String nombreTienda) {
         this.nombreTienda = nombreTienda;
     }
 
+    /**
+     * Establece la colección de usuarios.
+     * 
+     * @param usuario Colección de usuarios.
+     */
     public void setUsuario(Collection<Usuario> usuario) {
         this.usuario = usuario;
     }
     
+    /**
+     * Establece la colección de clientes.
+     * 
+     * @param cliente Colección de clientes.
+     */
     public void setCliente(Collection<Cliente> cliente) {
         this.clientes = clientes;
     }
 
+    /**
+     * Establece la colección de productos.
+     * 
+     * @param producto Colección de productos.
+     */
     public void setProducto(Collection<Producto> producto) {
         this.producto = producto;
     }
 
+    /**
+     * Establece la colección de servicios.
+     * 
+     * @param servicio Colección de servicios.
+     */
     public void setServicio(Collection<ServicioMantenimiento> servicio) {
         this.servicio = servicio;
     }
     
-//Metodo Usuario
+    // Métodos para Usuarios
+    
+    /**
+     * Registra un nuevo usuario en la tienda.
+     * 
+     * @param nuevoUsuario Usuario a registrar.
+     */
     public void registrarUsuario(Usuario nuevoUsuario) {
         if (nuevoUsuario == null) {
             System.out.println("El usuario no puede ser nulo.");
@@ -92,7 +159,13 @@ public class TiendaBicicletas {
         System.out.println("Usuario registrado exitosamente: " + nuevoUsuario);
     }
     
-    //Metodos Cliente
+    // Métodos para Clientes
+
+    /**
+     * Registra un nuevo cliente en la tienda.
+     * 
+     * @param nuevoCliente Cliente a registrar.
+     */
     public void registrarCliente(Cliente nuevoCliente) {
         if (nuevoCliente != null) {
             this.clientes.add(nuevoCliente);
@@ -102,6 +175,14 @@ public class TiendaBicicletas {
         }
     }
     
+    /**
+     * Busca un cliente en la tienda por código, nombre o apellido.
+     * 
+     * @param codigo Código del cliente.
+     * @param nombre Nombre del cliente.
+     * @param apellido Apellido del cliente.
+     * @return Cliente encontrado o {@code null} si no existe.
+     */
     public Cliente buscarCliente(int codigo, String nombre, String apellido) {
         for (Cliente c : this.clientes) {
             if (c.getCodigo() == codigo || 
@@ -114,32 +195,42 @@ public class TiendaBicicletas {
         return null;
     }
     
-    public void editarCliente(Cliente clienteEditado){
+    /**
+     * Edita los datos de un cliente existente.
+     * 
+     * @param clienteEditado Cliente con los datos actualizados.
+     */
+    public void editarCliente(Cliente clienteEditado) {
         if (clienteEditado != null) {
-        for (Cliente c : this.clientes) {
-            if (c.getCodigo() == clienteEditado.getCodigo()) {
-                c.setNombre(clienteEditado.getNombre());
-                c.setApellido(clienteEditado.getApellido());
-                c.setTelefono(clienteEditado.getTelefono());
-                c.setCorreo(clienteEditado.getCorreo());
-                c.setProvincia(clienteEditado.getProvincia());
-                c.setCanton(clienteEditado.getCanton());
-                c.setDistrito(clienteEditado.getDistrito());
-                c.setFechaNacimiento(clienteEditado.getFechaNacimiento());
-                System.out.println("Cliente editado exitosamente: " + c);
-                return;
+            for (Cliente c : this.clientes) {
+                if (c.getCodigo() == clienteEditado.getCodigo()) {
+                    c.setNombre(clienteEditado.getNombre());
+                    c.setApellido(clienteEditado.getApellido());
+                    c.setTelefono(clienteEditado.getTelefono());
+                    c.setCorreo(clienteEditado.getCorreo());
+                    c.setProvincia(clienteEditado.getProvincia());
+                    c.setCanton(clienteEditado.getCanton());
+                    c.setDistrito(clienteEditado.getDistrito());
+                    c.setFechaNacimiento(clienteEditado.getFechaNacimiento());
+                    System.out.println("Cliente editado exitosamente: " + c);
+                    return;
+                }
             }
+            System.out.println("Cliente no encontrado para editar.");
+        } else {
+            System.out.println("El cliente editado no puede ser nulo.");
         }
-        System.out.println("Cliente no encontrado para editar.");
-    } else {
-        System.out.println("El cliente editado no puede ser nulo.");
-    }
     }
     
-    public void eliminarCliente(int Codigo){
+    /**
+     * Elimina un cliente de la tienda por su código.
+     * 
+     * @param codigo Código del cliente a eliminar.
+     */
+    public void eliminarCliente(int codigo) {
         Cliente clienteAEliminar = null;
         for (Cliente c : this.clientes) {
-            if (c.getCodigo() == Codigo) {
+            if (c.getCodigo() == codigo) {
                 clienteAEliminar = c;
                 break;
             }
@@ -152,40 +243,6 @@ public class TiendaBicicletas {
         }
     }
     
-    
-    public void agregarProducto(Producto nuevoPoroducto){
-
-    }
-    
-    public Producto buscarProducto(int codigo, String nombre) {
-        return null;
-    }
-    
-    public void modificarProducto(Producto productoEditado) {
-
-    }
-
-    public void eliminarProducto(int codigo) {
-
-    }
-    
-    public void registrarServicio(ServicioMantenimiento nuevoServicio) {
-
-    }
-    
-    public ServicioMantenimiento buscarServicio(int codigo, String nombre) {
-        return null;
-    }
-    
-    public void modificarServicio(ServicioMantenimiento servicioEditado) {
-
-    }
-    
-    public void eliminarServicio(int codigo) {
-
-    }
-
-    
     @Override
     public String toString() {
         return "TiendaBicicletas{" +
@@ -196,8 +253,4 @@ public class TiendaBicicletas {
                 ", servicio=" + servicio +
                 '}';
     }
-    
-    
-    
-    
 }

@@ -6,10 +6,6 @@ package bicis.test.ui.UI;
 
 import bicis.test.ui.Login;
 import bicis.test.ui.TiendaBicicletas;
-import bicis.test.ui.TiendaBicicletas;
-import bicis.test.ui.UI.RegistroDeServicios;
-import bicis.test.ui.UI.RegistroDeClientes;
-import bicis.test.ui.UI.RegistroDeProductos;
 import bicis.test.ui.Utilidades;
 import java.awt.Color;
 

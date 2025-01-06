@@ -11,6 +11,8 @@ import java.util.Collection;
  * Clase que representa un servicio de mantenimiento para bicicletas.
  * Contiene información detallada sobre el servicio, como cliente, bicicleta,
  * fechas, precio y estado.
+ * 
+ * @author gabob
  */
 public class ServicioMantenimiento {
     // Variables
@@ -215,6 +217,7 @@ public class ServicioMantenimiento {
     public void setEstado(EstadoServicio estado) {
         this.estado = estado;
     }
+
     // -------------------------------------------------------------------------
 
     // Los otros métodos del UML que no son getters y setters
