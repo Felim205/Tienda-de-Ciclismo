@@ -16,18 +16,19 @@ import bicis.test.ui.Cliente;
 import bicis.test.ui.Bicicleta;
 
 /**
- *
+ * Clase que implementa la interfaz gráfica para el registro de servicios de
+ * mantenimiento en CicloTEC. Permite agregar, modificar, buscar y eliminar
+ * servicios, así como manejar los datos relacionados con los clientes y las bicicletas.
+ * 
  * @author gabob
  */
 public class RegistroDeServicios extends javax.swing.JFrame {
 
-    private void cargarEstadosEnComboBox() {
-    ComboBoxEstado.removeAllItems();//Se limpia
-    for (ServicioMantenimiento.EstadoServicio estado : ServicioMantenimiento.EstadoServicio.values()) {
-        ComboBoxEstado.addItem(estado.name()); //Se agregan los valores
-        }
-    }
-
+    /**
+     * Constructor que inicializa la ventana de registro de servicios.
+     * Configura los componentes gráficos y carga los datos necesarios
+     * para la interfaz, como clientes y estados.
+     */
     public RegistroDeServicios() {
         initComponents();
         
@@ -57,8 +58,15 @@ public class RegistroDeServicios extends javax.swing.JFrame {
             ComboBoxCliente.addItem(cliente.getFullNombre());
         }
     }
-    
-        
+    /**
+     * Carga los estados posibles de los servicios en el ComboBoxEstado.
+     */
+    private void cargarEstadosEnComboBox() {
+    ComboBoxEstado.removeAllItems();//Se limpia
+    for (ServicioMantenimiento.EstadoServicio estado : ServicioMantenimiento.EstadoServicio.values()) {
+        ComboBoxEstado.addItem(estado.name()); //Se agregan los valores
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -320,13 +328,24 @@ public class RegistroDeServicios extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    // Métodos de acción de los botones
+    /**
+     * Acción ejecutada al presionar el botón "Atrás". 
+     * Regresa al menú principal.
+     * 
+     * @param evt Evento de acción.
+     */
     private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
         MenuPrincipal jfmain = new MenuPrincipal();
         jfmain.show(); //Mostrar MenuPrincipal
         dispose(); //Cerrar RegistroDeServicios
     }//GEN-LAST:event_BackActionPerformed
-
+    /**
+     * Acción ejecutada al presionar el botón "Eliminar". 
+     * Elimina un servicio si cumple con las condiciones necesarias.
+     * 
+     * @param evt Evento de acción.
+     */
     private void EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarActionPerformed
         try {
         int codigo = Integer.parseInt(TextoCodigoServicio.getText().trim());
@@ -358,7 +377,12 @@ public class RegistroDeServicios extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Por favor, ingrese un código válido.");
     }
     }//GEN-LAST:event_EliminarActionPerformed
-
+    /**
+     * Acción ejecutada al presionar el botón "Modificar". 
+     * Permite modificar un servicio existente si cumple con las condiciones.
+     * 
+     * @param evt Evento de acción.
+     */
     private void ModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModificarActionPerformed
     try {
         // Obtener el código del servicio
@@ -427,7 +451,12 @@ public class RegistroDeServicios extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Por favor, seleccione un estado válido.", "Error de Estado", JOptionPane.ERROR_MESSAGE);
     }
     }//GEN-LAST:event_ModificarActionPerformed
-
+    /**
+     * Acción ejecutada al presionar el botón "Agregar". 
+     * Agrega un nuevo servicio si los campos están correctamente llenados.
+     * 
+     * @param evt Evento de acción.
+     */
     private void AgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarActionPerformed
     try {
         // Validar que los campos no estén vacíos
@@ -506,7 +535,12 @@ public class RegistroDeServicios extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Por favor, seleccione un estado válido.", "Error de Estado", JOptionPane.ERROR_MESSAGE);
     }
     }//GEN-LAST:event_AgregarActionPerformed
-
+    /**
+     * Acción ejecutada al presionar el botón "Buscar".
+     * Busca un servicio por su código y actualiza los campos en la interfaz gráfica si se encuentra.
+     * 
+     * @param evt Evento de acción generado por el botón.
+     */
     private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
         try {
             int codigo = Integer.parseInt(TextoCodigoServicio.getText().trim());
@@ -529,7 +563,12 @@ public class RegistroDeServicios extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Por favor, ingrese un código válido.");
         }
     }//GEN-LAST:event_BuscarActionPerformed
-
+    /**
+     * Acción ejecutada al seleccionar un estado en el ComboBoxEstado.
+     * Convierte la selección en un valor del enum EstadoServicio y lo imprime en la consola.
+     * 
+     * @param evt Evento de acción generado por el ComboBox.
+     */
     private void ComboBoxEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxEstadoActionPerformed
         String seleccion = (String) ComboBoxEstado.getSelectedItem(); //Se consigue la info en el comboBox
     if (seleccion != null && !seleccion.isEmpty()) {
@@ -543,7 +582,9 @@ public class RegistroDeServicios extends javax.swing.JFrame {
     }//GEN-LAST:event_TextFieldMarcaBiciActionPerformed
 
     /**
-     * @param args the command line arguments
+     * Método principal que inicia la interfaz gráfica.
+     * 
+     * @param args Argumentos de línea de comandos.
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

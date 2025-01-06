@@ -18,38 +18,60 @@ import java.security.NoSuchAlgorithmException;
 import java.time.format.DateTimeParseException;
 
 /**
- *
+ * Clase de utilidades para realizar tareas comunes en la aplicación CicloTEC.
+ * Proporciona métodos para manejar imágenes, colores de fondo, íconos personalizados,
+ * manejo de fechas y gestión de contraseñas.
+ * 
  * @author gabob
  */
 public class Utilidades {
-    
+
+    /**
+     * Ajusta el tamaño de la imagen para que se adapte al JLabel proporcionado.
+     * 
+     * @param stretcyImage JLabel al que se ajustará la imagen.
+     */
     public static void imageStretcher(JLabel stretcyImage) {
-    //Ajusta el tamaño de la imágen para que esta
-    //quepa dentro del jLabel
-    Icon i = stretcyImage.getIcon();
-    ImageIcon icon = (ImageIcon)i;
-    Image image = icon.getImage().getScaledInstance(stretcyImage.getWidth(), stretcyImage.getHeight(), Image.SCALE_SMOOTH);
-    stretcyImage.setIcon(new ImageIcon(image));
+        Icon i = stretcyImage.getIcon();
+        ImageIcon icon = (ImageIcon) i;
+        Image image = icon.getImage().getScaledInstance(stretcyImage.getWidth(), stretcyImage.getHeight(), Image.SCALE_SMOOTH);
+        stretcyImage.setIcon(new ImageIcon(image));
     }
-    
-    public static void setBackgroundColor (JFrame frame, Color color) {
-        //Cambia el color del JFrame principal (El fondo)
+
+    /**
+     * Cambia el color de fondo del JFrame principal.
+     * 
+     * @param frame JFrame cuyo fondo se desea cambiar.
+     * @param color Color que se aplicará como fondo.
+     */
+    public static void setBackgroundColor(JFrame frame, Color color) {
         frame.getContentPane().setBackground(color);
     }
-    
+
+    /**
+     * Establece un ícono personalizado en un JFrame utilizando un recurso en la ruta especificada.
+     * 
+     * @param frame JFrame al que se le asignará el ícono.
+     * @param path Ruta del recurso de la imagen del ícono.
+     * @throws IllegalArgumentException Si el frame o la ruta son nulos o vacíos.
+     */
     public static void setCustomIcon(JFrame frame, String path) {
-        //Validación Auxiliar recomendada
         if (frame == null || path == null || path.isEmpty()) {
             throw new IllegalArgumentException("El frame o la ruta del recurso no pueden ser nulos o vacíos.");
         }
-        //Agarrar la imagen de res
         frame.setIconImage(
             Toolkit.getDefaultToolkit().getImage(Utilidades.class.getResource("/" + path))
         );
     }
-    
-        public static LocalDate convertirFecha(String fecha) {
-        //Se Parsea una fecha para volverla LocalDate
+
+    /**
+     * Convierte una cadena de texto que representa una fecha en formato "dd-MM-yyyy"
+     * a un objeto {@link LocalDate}.
+     * 
+     * @param fecha Cadena que representa la fecha.
+     * @return Objeto {@link LocalDate} o {@code null} si ocurre un error en el parseo.
+     */
+    public static LocalDate convertirFecha(String fecha) {
         try {
             return LocalDate.parse(fecha.trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         } catch (DateTimeParseException e) {
@@ -57,17 +79,28 @@ public class Utilidades {
             return null;
         }
     }
-    
+
+    /**
+     * Convierte un objeto {@link LocalDate} a una cadena en formato "dd-MM-yyyy".
+     * 
+     * @param fecha Objeto {@link LocalDate} que se desea convertir.
+     * @return Cadena que representa la fecha o {@code null} si el objeto es nulo.
+     */
     public static String convertirFechaAString(LocalDate fecha) {
-        //Usamos LocalDate para manejar tiempo pero se necesita en String 
-    if (fecha == null) {
+        if (fecha == null) {
             return null;
         }
         return fecha.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
-    
+
+    /**
+     * Genera un hash de una contraseña utilizando el algoritmo SHA-256.
+     * 
+     * @param password Contraseña en texto plano.
+     * @return Cadena que representa el hash de la contraseña.
+     * @throws RuntimeException Si ocurre un error al generar el hash.
+     */
     public static String hashPassword(String password) {
-        //Hashea las contraseñas
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hashedBytes = md.digest(password.getBytes());
@@ -81,10 +114,14 @@ public class Utilidades {
         }
     }
 
+    /**
+     * Verifica si una contraseña original coincide con su hash utilizando SHA-256.
+     * 
+     * @param originalPassword Contraseña original en texto plano.
+     * @param hashedPassword Hash de la contraseña para verificar.
+     * @return {@code true} si la contraseña coincide, {@code false} en caso contrario.
+     */
     public static boolean verifyPassword(String originalPassword, String hashedPassword) {
-        //des-hashea las contraseñas
         return hashPassword(originalPassword).equals(hashedPassword);
     }
-    
 }
-    

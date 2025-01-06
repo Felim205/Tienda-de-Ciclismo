@@ -9,18 +9,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * Clase que implementa la gestión de usuarios y el proceso de autenticación local
+ * basado en un archivo de texto. Los usuarios se cargan desde un archivo y se
+ * validan sus credenciales en el sistema.
+ * 
  * @author gabob
  */
 public class LoginLocal {
     private static final String FILE_PATH = "usuarios.txt";
     private final Map<String, Usuario> usuarios = new HashMap<>();
 
+    /**
+     * Constructor que inicializa la instancia de LoginLocal cargando los usuarios
+     * desde el archivo de texto.
+     */
     public LoginLocal() {
         cargarUsuarios();
     }
 
-    // Se cargan los usuarios desde el archivo txt
+    /**
+     * Carga los usuarios desde un archivo de texto y los almacena en un mapa.
+     * Cada línea del archivo debe tener el formato "username|hashed_password".
+     */
     private void cargarUsuarios() {
         try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
             String linea;
@@ -35,7 +45,14 @@ public class LoginLocal {
         }
     }
 
-    // Autentifica las credenciales
+    /**
+     * Autentica las credenciales de un usuario comparando el nombre de usuario
+     * y la contraseña proporcionados contra los datos almacenados.
+     * 
+     * @param username Nombre de usuario.
+     * @param password Contraseña en texto plano.
+     * @return {@code true} si las credenciales son válidas, {@code false} en caso contrario.
+     */
     public boolean autenticar(String username, String password) {
         Usuario usuario = usuarios.get(username);
         if (usuario != null) {
@@ -44,7 +61,10 @@ public class LoginLocal {
         return false;
     }
 
-    // Inicializa con estos usuarios de prueba
+    /**
+     * Inicializa el archivo de usuarios con una lista de usuarios de prueba.
+     * Cada usuario tendrá un nombre y una contraseña predefinida.
+     */
     public static void inicializarArchivoUsuarios() {
         String[] usuariosIniciales = {
             "admin|" + Utilidades.hashPassword("1234"),
@@ -64,22 +84,38 @@ public class LoginLocal {
         }
     }
 
-    // Vlida credenciales
+    /**
+     * Valida las credenciales del usuario llamando al método {@link #autenticar}.
+     * 
+     * @param username Nombre de usuario.
+     * @param password Contraseña en texto plano.
+     * @return {@code true} si las credenciales son válidas, {@code false} en caso contrario.
+     */
     public boolean validarCredenciales(String username, String password) {
         return autenticar(username, password);
     }
 
-    // Obteniene los usuarios como objetos
+    /**
+     * Obtiene el mapa de usuarios registrados en el sistema como objetos {@link Usuario}.
+     * 
+     * @return Mapa que contiene los usuarios, donde la clave es el nombre de usuario.
+     */
     public Map<String, Usuario> obtenerUsuarios() {
         return usuarios;
     }
 
+    /**
+     * Método principal para probar la funcionalidad del sistema de autenticación local.
+     * Inicializa el archivo de usuarios y realiza pruebas de inicio de sesión.
+     * 
+     * @param args Argumentos de línea de comandos.
+     */
     public static void main(String[] args) {
         inicializarArchivoUsuarios();
 
         LoginLocal login = new LoginLocal();
 
-        // Prueba
+        // Pruebas
         System.out.println("admin -> 1234: " + login.validarCredenciales("admin", "1234"));
         System.out.println("Gabriel -> 1205: " + login.validarCredenciales("Gabriel", "1205"));
         System.out.println("Felipe -> 0202: " + login.validarCredenciales("Felipe", "0202"));
