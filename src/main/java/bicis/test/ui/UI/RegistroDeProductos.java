@@ -405,24 +405,23 @@ public class RegistroDeProductos extends javax.swing.JFrame {
     }                                       
 
     private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {                                       
-    try {
-        int codigo = Integer.parseInt(TextoCodigo.getText());
-        Producto producto = Producto.buscarProducto(codigo, "");
-
-        if (producto != null) {
-            TextFieldNombre.setText(producto.getNombreProducto());
-            TextFieldCodigoArticulo.setText(String.valueOf(producto.getCodigoArticulo()));
-            TextFieldNombreArticulo.setText(producto.getNombreArticulo());
-            TextFieldMarca.setText(producto.getMarcaProducto());
-            TextFieldPrecio.setText(String.valueOf(producto.getPrecio()));
-            TextFieldCantidad.setText(String.valueOf(producto.getCantidad()));
-            ComboBoxTipo.setSelectedItem(producto.getTipoproducto().toString());
-            JOptionPane.showMessageDialog(this, "Producto encontrado.");
+        try {
+            int codigo = Integer.parseInt(TextoCodigo.getText());
+            Producto producto = Producto.buscarProducto(codigo, "");
+    
+            if (producto != null) {
+                TextFieldNombre.setText(producto.getNombreProducto());
+                TextFieldCodigoArticulo.setText(String.valueOf(producto.getCodigoArticulo()));
+                TextFieldNombreArticulo.setText(producto.getNombreArticulo());
+                TextFieldMarca.setText(producto.getMarcaProducto());
+                TextFieldPrecio.setText(String.valueOf(producto.getPrecio()));
+                TextFieldCantidad.setText(String.valueOf(producto.getCantidad()));
+                ComboBoxTipo.setSelectedItem(producto.getTipoproducto().toString());
+                JOptionPane.showMessageDialog(this, "Producto encontrado.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al buscar producto: " + e.getMessage());
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error al buscar producto: " + e.getMessage());
-    }
-}
     }                                      
 
     /**
