@@ -4,7 +4,12 @@
  */
 package bicis.test.ui;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class Producto {
+    private static List<Producto> listaProductos = new ArrayList<>();
+    
     private int codigoProducto;
     private String nombreProducto;
     private int codigoArticulo;
@@ -93,6 +98,48 @@ public class Producto {
         this.tipoProducto = tipoProducto;
     }
     
+    //Metodos
+    public static void agregarProducto(Producto nuevoProducto){
+        listaProductos.add(nuevoProducto);
+    }
+    
+    public static Producto buscarProducto(int codigo, String nombre) {
+        //por cada producto en la lista de productos
+        for (Producto producto : listaProductos) {
+            //si el codigo del producto es igual al codigo proporcionado o el nombre es igual (usando la funcion de abajo que compara dos cadenas de texto igorando mayusculas o minusculas)al nombre proporcionado
+            if (producto.codigoProducto == codigo || producto.nombreProducto.equalsIgnoreCase(nombre)){
+                return producto; // retorna ese producto
+            }
+        }
+        return null; //sino null
+    }
+    
+    public static void modificarProducto(int codigo, String nuevoNombre, int nuevoCodigoArticulo, String nuevoNombreArticulo, String nuevaMarca, int nuevoPrecio, int nuevaCantidad, Producto.TipoProducto nuevoTipo) {
+        // misma logica de buscar un elemento que el metodo de buscar
+        for (Producto producto : listaProductos) {
+            if (producto.codigoProducto == codigo){
+                // Si se encuentra el producto se actualizan los datos
+                producto.setNombreProducto(nuevoNombre);
+                producto.setCodigoArticulo(nuevoCodigoArticulo);
+                producto.setNombreArticulo(nuevoNombreArticulo);
+                producto.setMarcaProducto(nuevaMarca);
+                producto.setPrecio(nuevoPrecio);
+                producto.setCantidad(nuevaCantidad);
+                producto.setTipoproducto(nuevoTipo);
+
+                System.out.println("Producto modificado correctamente.");
+                return;
+            }
+            System.out.println("El producto no ha podido ser modificado.");
+        }
+        // Si no se encuentra el producto, mostramos un mensaje
+        System.out.println("Producto no encontrado. No se puede modificar.");
+    }
+
+    public static void eliminarProducto(int codigo) {
+        listaProductos.removeIf(producto -> producto.codigoProducto == codigo);
+    }
+    
     @Override
     public String toString() {
         return "Producto{" +
@@ -105,9 +152,5 @@ public class Producto {
                 ", cantidad=" + cantidad +
                 ", tipoProducto=" + tipoProducto +
                 '}';
-    }
-    
-    
+    }  
 }
-
-
