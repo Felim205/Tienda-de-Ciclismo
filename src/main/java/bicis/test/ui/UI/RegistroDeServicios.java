@@ -482,15 +482,6 @@ public class RegistroDeServicios extends javax.swing.JFrame {
             return;
         }
 
-        String textoTamaño = TextFieldMarcaBici.getText().trim();
-        try {
-            Bicicleta.TamañoBicicleta.valueOf(textoTamaño.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this, 
-                "El tamaño ingresado no es válido. Los tamaños permitidos son: T12, T16, T22, T26, T27, T27_5, T29.", 
-                "Error de Tamaño", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
 
         ServicioMantenimiento nuevoServicio = new ServicioMantenimiento(
             ServicioManager.getCodigoServicioActual(), 
