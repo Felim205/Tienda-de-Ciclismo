@@ -5,6 +5,11 @@
 package bicis.test.ui.UI;
 
 import bicis.test.ui.Login;
+import bicis.test.ui.TiendaBicicletas;
+import bicis.test.ui.TiendaBicicletas;
+import bicis.test.ui.UI.RegistroDeServicios;
+import bicis.test.ui.UI.RegistroDeClientes;
+import bicis.test.ui.UI.RegistroDeProductos;
 import bicis.test.ui.Utilidades;
 import java.awt.Color;
 
@@ -190,7 +195,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
      * @param evt Evento de acción generado por el botón.
      */
     private void RegistroClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistroClientesActionPerformed
-        RegistroDeClientes jfclientes = new RegistroDeClientes();
+        TiendaBicicletas tienda = new TiendaBicicletas();
+        RegistroDeClientes jfclientes = new RegistroDeClientes(tienda);
         jfclientes.show(); //Registro de Clientes
         dispose(); //Cerrar MainMenu
     }//GEN-LAST:event_RegistroClientesActionPerformed

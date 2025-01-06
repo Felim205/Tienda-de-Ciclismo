@@ -21,7 +21,7 @@ public class Cliente {
     private Date fechaNacimiento;
     
     public enum Provincia {
-        ALAJUELA, CARTAGO, GUANACASTE, HEREDIA, LIMON, PUNTARENAS, SAN_JOSE
+        ALAJUELA, CARTAGO, GUANACASTE, HEREDIA, LIMON, PUNTARENAS, SAN_JOSÉ
     }
 
     public Cliente(int codigo, String nombre, String apellido, int telefono, String correo, Provincia provincia, String canton, String distrito, Date fechaNacimiento) {

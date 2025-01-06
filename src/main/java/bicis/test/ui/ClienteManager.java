@@ -17,7 +17,7 @@ public class ClienteManager {
 
     static {
         // Simula datos en memoria
-        clientes.add(new Cliente(1, "Juan", "Pérez", 12345678, "juan@example.com", Cliente.Provincia.SAN_JOSE, "San José", "Catedral", new Date()));
+        clientes.add(new Cliente(1, "Juan", "Pérez", 12345678, "juan@example.com", Cliente.Provincia.SAN_JOSÉ, "San José", "Catedral", new Date()));
         clientes.add(new Cliente(2, "María", "Gómez", 87654321, "maria@example.com", Cliente.Provincia.CARTAGO, "Cartago", "Oriental", new Date()));
         clientes.add(new Cliente(3, "Carlos", "Ramírez", 11223344, "carlos@example.com", Cliente.Provincia.HEREDIA, "Heredia", "San Francisco", new Date()));
     }

@@ -20,8 +20,10 @@ public class RegistroDeClientes extends javax.swing.JFrame {
     /**
      * Creates new form MenuPrincipal
      */
-
-    public RegistroDeClientes() {
+    private final TiendaBicicletas tienda; // Instancia de TiendaBicicletas
+    
+    public RegistroDeClientes(TiendaBicicletas tienda) {
+        this.tienda = tienda;
         initComponents();
         
         //El array de los JLabels
@@ -253,7 +255,12 @@ public class RegistroDeClientes extends javax.swing.JFrame {
 
         ComboBoxProvincia.setBackground(new java.awt.Color(217, 217, 217));
         ComboBoxProvincia.setForeground(new java.awt.Color(51, 51, 51));
-        ComboBoxProvincia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "San José", "Alajuela", "Cartago", "Heredia", "Guanacaste", "Puntarenas", "Limón" }));
+        ComboBoxProvincia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "...", "San_José", "Alajuela", "Cartago", "Heredia", "Guanacaste", "Puntarenas", "Limón" }));
+        ComboBoxProvincia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboBoxProvinciaActionPerformed(evt);
+            }
+        });
         getContentPane().add(ComboBoxProvincia, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 220, 330, -1));
 
         TextFieldCanton.setBackground(new java.awt.Color(217, 217, 217));
@@ -309,7 +316,69 @@ public class RegistroDeClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_BackActionPerformed
 
     private void EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarActionPerformed
-        // TODO add your handling code here:
+    // Mostrar un diálogo de confirmación
+    int confirmacion = javax.swing.JOptionPane.showConfirmDialog(
+        this, 
+        "¿Está seguro de que desea eliminar este cliente?", 
+        "Confirmar Eliminación", 
+        javax.swing.JOptionPane.YES_NO_OPTION
+    );
+    
+    // Si el usuario confirma (selecciona "Sí")
+    if (confirmacion == javax.swing.JOptionPane.YES_OPTION) {
+        try {
+            // Solicitar el código del cliente a eliminar
+            String codigoStr = javax.swing.JOptionPane.showInputDialog(
+                this, 
+                "Ingrese el código del cliente a eliminar:", 
+                "Eliminar Cliente", 
+                javax.swing.JOptionPane.QUESTION_MESSAGE
+            );
+            
+            // Validar que se ingresó un código
+            if (codigoStr != null && !codigoStr.trim().isEmpty()) {
+                try {
+                    int codigo = Integer.parseInt(codigoStr.trim());
+                    
+                    // Buscar y eliminar el cliente
+                    Cliente clienteAEliminar = tienda.buscarCliente(codigo, null, null);
+                    
+                    if (clienteAEliminar != null) {
+                        tienda.eliminarCliente(codigo);
+                        
+                        // Mostrar mensaje de éxito
+                        javax.swing.JOptionPane.showMessageDialog(
+                            this, 
+                            "Cliente eliminado exitosamente", 
+                            "Eliminación Exitosa", 
+                            javax.swing.JOptionPane.INFORMATION_MESSAGE
+                        );
+                    } else {
+                        javax.swing.JOptionPane.showMessageDialog(
+                            this, 
+                            "No se encontró un cliente con ese código", 
+                            "Error", 
+                            javax.swing.JOptionPane.ERROR_MESSAGE
+                        );
+                    }
+                } catch (NumberFormatException e) {
+                    javax.swing.JOptionPane.showMessageDialog(
+                        this, 
+                        "Código inválido. Debe ser un número.", 
+                        "Error", 
+                        javax.swing.JOptionPane.ERROR_MESSAGE
+                    );
+                }
+            }
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this, 
+                "Error al eliminar cliente: " + e.getMessage(), 
+                "Error", 
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }       
     }//GEN-LAST:event_EliminarActionPerformed
 
     private void ModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModificarActionPerformed
@@ -321,8 +390,6 @@ public class RegistroDeClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_TextFieldNombreActionPerformed
 
     private void AgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarActionPerformed
-
-        TiendaBicicletas tienda = new TiendaBicicletas();
 
         try {
             // Obtener los valores de los campos de texto
@@ -412,7 +479,7 @@ public class RegistroDeClientes extends javax.swing.JFrame {
 
             // Mostrar mensaje de éxito
             javax.swing.JOptionPane.showMessageDialog(this, 
-                "Cliente registrado exitosamente\nCódigo: " + nombre, 
+                "Cliente registrado exitosamente\n Nombre: " + nombre, 
                 "Registro Exitoso", 
                 javax.swing.JOptionPane.INFORMATION_MESSAGE);
 
@@ -440,6 +507,10 @@ public class RegistroDeClientes extends javax.swing.JFrame {
         ComboBoxProvincia.setSelectedIndex(0);
         TextoCodigo.setText("...");
     }//GEN-LAST:event_AgregarActionPerformed
+
+    private void ComboBoxProvinciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxProvinciaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboBoxProvinciaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -472,9 +543,22 @@ public class RegistroDeClientes extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(RegistroDeClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+
+        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new RegistroDeClientes().setVisible(true);
+                TiendaBicicletas tienda = new TiendaBicicletas(); // Crear instancia de TiendaBicicletas
+                new RegistroDeClientes(tienda).setVisible(true); // Pasar la tienda al constructor
             }
         });
     }

@@ -7,24 +7,31 @@ package bicis.test.ui;
 import bicis.test.ui.Servicios.ServicioMantenimiento;
 import java.util.Collection;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TiendaBicicletas {
     private String nombreTienda;
     private Collection<Usuario> usuario;
-    private Collection<Cliente> cliente;
     private Collection<Producto> producto;
     private Collection<ServicioMantenimiento> servicio;
+    private List<Cliente> clientes;
 
     public TiendaBicicletas() {
         this.usuario = new ArrayList<>();
-        this.cliente = new ArrayList<>();
+        this.clientes = new ArrayList<>();
         this.producto = new ArrayList<>();
         this.servicio = new ArrayList<>();
+        this.clientes = new ArrayList<>();
     }
     
     public TiendaBicicletas(String nombreTienda) {
         this();
         this.nombreTienda = nombreTienda;
+    }
+   
+
+    public List<Cliente> getClientes() {
+        return clientes; // Método para obtener la lista de clientes
     }
 
     public String getNombreTienda() {
@@ -36,7 +43,7 @@ public class TiendaBicicletas {
     }
 
     public Collection<Cliente> getCliente() {
-        return cliente;
+        return clientes;
     }
 
     public Collection<Producto> getProducto() {
@@ -56,7 +63,7 @@ public class TiendaBicicletas {
     }
     
     public void setCliente(Collection<Cliente> cliente) {
-        this.cliente = cliente;
+        this.clientes = clientes;
     }
 
     public void setProducto(Collection<Producto> producto) {
@@ -88,7 +95,7 @@ public class TiendaBicicletas {
     //Metodos Cliente
     public void registrarCliente(Cliente nuevoCliente) {
         if (nuevoCliente != null) {
-            this.cliente.add(nuevoCliente);
+            this.clientes.add(nuevoCliente);
             System.out.println("Cliente registrado exitosamente: " + nuevoCliente);
         } else {
             System.out.println("El cliente no puede ser nulo.");
@@ -96,7 +103,7 @@ public class TiendaBicicletas {
     }
     
     public Cliente buscarCliente(int codigo, String nombre, String apellido) {
-        for (Cliente c : this.cliente) {
+        for (Cliente c : this.clientes) {
             if (c.getCodigo() == codigo || 
                 c.getNombre().equalsIgnoreCase(nombre) || 
                 c.getApellido().equalsIgnoreCase(apellido)) {
@@ -109,7 +116,7 @@ public class TiendaBicicletas {
     
     public void editarCliente(Cliente clienteEditado){
         if (clienteEditado != null) {
-        for (Cliente c : this.cliente) {
+        for (Cliente c : this.clientes) {
             if (c.getCodigo() == clienteEditado.getCodigo()) {
                 c.setNombre(clienteEditado.getNombre());
                 c.setApellido(clienteEditado.getApellido());
@@ -131,14 +138,14 @@ public class TiendaBicicletas {
     
     public void eliminarCliente(int Codigo){
         Cliente clienteAEliminar = null;
-        for (Cliente c : this.cliente) {
+        for (Cliente c : this.clientes) {
             if (c.getCodigo() == Codigo) {
                 clienteAEliminar = c;
                 break;
             }
         }
         if (clienteAEliminar != null) {
-            this.cliente.remove(clienteAEliminar);
+            this.clientes.remove(clienteAEliminar);
             System.out.println("Cliente eliminado exitosamente: " + clienteAEliminar);
         } else {
             System.out.println("Cliente no encontrado para eliminar.");
@@ -184,7 +191,7 @@ public class TiendaBicicletas {
         return "TiendaBicicletas{" +
                 "nombreTienda=" + nombreTienda +
                 ", usuario=" + usuario +
-                ", cliente=" + cliente +
+                ", cliente=" + clientes +
                 ", producto=" + producto +
                 ", servicio=" + servicio +
                 '}';
