@@ -14,6 +14,9 @@ import bicis.test.ui.Servicios.ServicioMantenimiento;
 import bicis.test.ui.ClienteManager;
 import bicis.test.ui.Cliente;
 import bicis.test.ui.Bicicleta;
+import bicis.test.ui.TiendaBicicletas;
+import java.time.ZoneId;
+import java.util.Date;
 
 /**
  * Clase que implementa la interfaz gráfica para el registro de servicios de
@@ -23,7 +26,7 @@ import bicis.test.ui.Bicicleta;
  * @author gabob
  */
 public class RegistroDeServicios extends javax.swing.JFrame {
-
+    private final TiendaBicicletas tienda = new TiendaBicicletas();
     /**
      * Constructor que inicializa la ventana de registro de servicios.
      * Configura los componentes gráficos y carga los datos necesarios
@@ -52,6 +55,7 @@ public class RegistroDeServicios extends javax.swing.JFrame {
         //Actualizar el JLabel del código de servicio
         TextoCodigoServicio.setText(String.valueOf(ServicioManager.getCodigoServicioActual()));
         cargarEstadosEnComboBox();
+        cargarClientesEnComboBox();
         
         // Llenar el ComboBoxCliente con los clientes
         for (Cliente cliente : ClienteManager.getClientes()) {
@@ -67,6 +71,37 @@ public class RegistroDeServicios extends javax.swing.JFrame {
         ComboBoxEstado.addItem(estado.name()); //Se agregan los valores
         }
     }
+    
+    /**
+    * Carga los clientes registrados en la TiendaBicicletas al ComboBoxCliente.
+    */
+private void cargarClientesEnComboBox() {
+    ComboBoxCliente.removeAllItems(); // Limpiar items existentes
+    if (tienda.getClientes().isEmpty()) {
+        // Crear cliente "dummy" para pruebas
+        LocalDate localDateDummy = LocalDate.of(2000, 1, 1); // Fecha como LocalDate
+        Date dateDummy = Date.from(localDateDummy.atStartOfDay(ZoneId.systemDefault()).toInstant()); // Convertir a Date
+        Cliente clienteDummy = new Cliente(
+            0,                              // Código
+            "Cliente",                      // Nombre
+            "Dummy",                        // Apellido
+            12345678,                       // Teléfono
+            "dummy@example.com",            // Correo
+            Cliente.Provincia.SAN_JOSÉ,     // Provincia
+            "Cantón Dummy",                 // Cantón
+            "Distrito Dummy",               // Distrito
+            dateDummy                       // Fecha de nacimiento como Date
+        );
+        tienda.registrarCliente(clienteDummy); // Registrar cliente "dummy"
+    }
+    
+    // Cargar clientes en el ComboBox
+    for (Cliente cliente : tienda.getClientes()) {
+        ComboBoxCliente.addItem(cliente.getFullNombre());
+    }
+}
+
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -619,7 +654,7 @@ public class RegistroDeServicios extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new RegistroDeServicios().setVisible(true);
+            new RegistroDeServicios().setVisible(true); // Crear y mostrar la ventana de RegistroDeServicios
         });
     }
 
